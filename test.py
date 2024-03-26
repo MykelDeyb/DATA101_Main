@@ -2,7 +2,7 @@
 # git add .
 # git status
 # git commit -m "New Edit1"
-# git push master
+# git push origin master
 
 #git init
 #git remote add origin https://github.com/MykelDeyb/DATA101_Main.git
