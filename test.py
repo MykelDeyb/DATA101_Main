@@ -1,4 +1,4 @@
-# git pull
+# git pull origin master 
 # git add .
 # git status
 # git commit -m "New Edit1"
