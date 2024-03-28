@@ -6,17 +6,17 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Create layout for each page
 page1_layout = html.Div([
-    html.H1('Page 1'),
-    html.P('This is page 1.')
+    html.H1('CMCI HUB'),
+    html.P('Explore CMCI Data with Ease')
 ])
 
 page2_layout = html.Div([
-    html.H1('Page 2'),
+    html.H1('VISUALIZATION DASHBOARD'),
     html.P('This is page 2.')
 ])
 
 page3_layout = html.Div([
-    html.H1('Page 3'),
+    html.H1('INTERACTIVE MAP'),
     html.P('This is page 3.')
 ])
 
@@ -25,9 +25,9 @@ navbar = dbc.NavbarSimple(
     children=[
         html.Div(
             [
-                dbc.Button("Page 1", href="/page-1", color="primary", className="mr-1"),
-                dbc.Button("Page 2", href="/page-2", color="primary", className="mr-1"),
-                dbc.Button("Page 3", href="/page-3", color="primary")
+                dbc.Button("CMCI HUB", href="/page-1", color="primary", className="mr-1"),
+                dbc.Button("VISUALIZATION DASHBOARD", href="/page-2", color="primary", className="mr-1"),
+                dbc.Button("INTERACTIVE MAP", href="/page-3", color="primary")
             ],
             className="d-flex justify-content-center"  # Center the buttons horizontally
         )
@@ -41,7 +41,7 @@ navbar = dbc.NavbarSimple(
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/page-1':
+    if pathname == '/' or pathname == '/page-1':  # Check if the pathname is empty or '/page-1'
         return page1_layout
     elif pathname == '/page-2':
         return page2_layout
