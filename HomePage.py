@@ -1,10 +1,8 @@
 from dash import Dash, html, dcc, callback, Output, Input
 import dash_bootstrap_components as dbc
 
-# Initializing your Dash application
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-# Create layout for each page
 page1_layout = html.Div([
     html.H1('CMCI HUB'),
     html.P('Explore CMCI Data with Ease')
@@ -29,7 +27,7 @@ navbar = dbc.NavbarSimple(
                 dbc.Button("VISUALIZATION DASHBOARD", href="/page-2", color="primary", className="mr-1"),
                 dbc.Button("INTERACTIVE MAP", href="/page-3", color="primary")
             ],
-            className="d-flex justify-content-center"  # Center the buttons horizontally
+            className="d-flex justify-content-center"
         )
     ],
     color="dark",  # Set navigation bar color to dark
@@ -37,11 +35,10 @@ navbar = dbc.NavbarSimple(
     style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
 )
 
-# Define callback to update page content based on URL
 @app.callback(Output('page-content', 'children'),
               [Input('url', 'pathname')])
 def display_page(pathname):
-    if pathname == '/' or pathname == '/page-1':  # Check if the pathname is empty or '/page-1'
+    if pathname == '/' or pathname == '/page-1':
         return page1_layout
     elif pathname == '/page-2':
         return page2_layout
@@ -50,7 +47,6 @@ def display_page(pathname):
     else:
         return '404 - Page not found'
 
-# Layout of the entire app
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     navbar,
