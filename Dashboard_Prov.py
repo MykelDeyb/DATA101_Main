@@ -90,19 +90,19 @@ page2_layout = html.Div([
     # Sidebar
     html.Div([
              # Search bar 
-        html.Label('Select Provinces',style={'fontWeight': 'bold'}),
+        html.Label('Select Provinces',style={'fontWeight': 'bold', 'margin-right':'40px'}),
         dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
         dcc.Checklist(
             id='province-checkboxes',
             options=[{'label': province, 'value': province} for province in provinces],
             value=[],
-            style={'overflowY': 'scroll', 'height': '400px'}
+            style={'overflowY': 'scroll', 'height': '1000px', 'font-size':'20px', 'margin-right':'2%'}
         ),
-        html.Button('Clear Selection', id='clear-selection-button', n_clicks=0, style={'fontSize':'20px'})
-    ], style={'width': '20%', 'float': 'right', 'margin-left': '10px','border': '1px solid #ccc','font-size':'15px'}),
+        html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
+    ], style={'width': '20%', 'float': 'right', 'margin-left': '2px','border': '1px solid #ccc','font-size':'20px'}),
 ]),
         # Table province data
-        html.Div(id='table-container', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
+        html.Div(id='table-container', style={'width': '50%', 'float': 'left', 'border': '1px solid #ccc',}),
 
     # Line chart 
     html.Div([
@@ -172,24 +172,27 @@ def update_data(pillar, start_year, end_year, selected_provinces):
             filtered_distances_km.append(distance_km)
             filtered_distances_mi.append(distance_mi)
 
-    table_rows = [
-        html.Tr([
-            html.Th('Province/LGU'),
-            html.Th('Distance (km)'),
-            html.Th('Distance (mi)')
-        ])
-    ]
-    for province, distance_km, distance_mi, color in zip(filtered_provinces, filtered_distances_km, filtered_distances_mi, color_palette):
+    table_rows = []
+
+    # Add header row with spacing
+    table_rows.append(html.Tr([
+        html.Th('Province', style={'padding-right': '100px', 'font-size':'20px'}),
+        html.Th('Distance (km)', style={'padding-right': '20px','font-size':'20px'}),
+        html.Th('Distance (mi)', style={'font-size':'20px'})
+    ]))
+
+    # Add data rows
+    for province, distance_km, distance_mi in zip(filtered_provinces[0:85], filtered_distances_km[0:85], filtered_distances_mi[0:85]):
         table_rows.append(html.Tr([
             html.Td(province),
             html.Td(distance_km),
             html.Td(distance_mi)
-        ]))
+    ]))
 
     line_chart_data = []
     for province, scores, color in zip(filtered_provinces, filtered_scores, color_palette):
         line_chart_data.append({
-            'x': list(range(start_year, end_year + 1)),
+            'x': list(range(start_year -1, end_year)),
             'y': scores,
             'mode': 'lines',
             'name': province,
@@ -248,9 +251,9 @@ navbar = dbc.NavbarSimple(
     children=[
         html.Div(
             [
-                dbc.Button("CMCI HUB", href="/page-1", color="secondary", className="me-2"),
-                dbc.Button("VISUALIZATION DASHBOARD", href="/page-2", color="secondary", className="me-2"),
-                dbc.Button("INTERACTIVE MAP", href="/page-3", color="secondary")
+                dbc.Button("🌐 CMCI HUB", href="/page-1", color="secondary", className="me-3"),
+                dbc.Button("📊 VISUALIZATION DASHBOARD", href="/page-2", color="secondary", className="me-3"),
+                dbc.Button("🗾 INTERACTIVE MAP", href="/page-3", color="secondary")
             ],
             className="d-flex justify-content-center"
         )
