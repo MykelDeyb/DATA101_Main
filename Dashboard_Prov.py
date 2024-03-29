@@ -99,7 +99,7 @@ page2_layout = html.Div([
             style={'overflowY': 'scroll', 'height': '400px'}
         ),
         html.Button('Clear Selection', id='clear-selection-button', n_clicks=0, style={'fontSize':'20px'})
-    ], style={'width': '20%', 'float': 'right', 'margin-left': '10px','border': '1px solid #ccc','font-size':'25px'}),
+    ], style={'width': '20%', 'float': 'right', 'margin-left': '10px','border': '1px solid #ccc','font-size':'15px'}),
 ]),
         # Table province data
         html.Div(id='table-container', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
