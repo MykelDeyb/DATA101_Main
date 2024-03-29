@@ -146,7 +146,7 @@ app.layout = dbc.Container([
                     style={'width': '80px'}
                 ),
             ])
-        ], width=4)  # Set width to 4 to take up one-third of the row
+        ], width=4)
     ], justify='around')
 ], fluid=True)
 
@@ -249,7 +249,7 @@ def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pill
             bar_chart_filtered_provinces.append(province)
             bar_chart_filtered_scores.append(scores)
 
-    bar_chart_overall_scores = [score[bar_chart_year - start_year] for score in bar_chart_filtered_scores]  # Fixed indexing here
+    bar_chart_overall_scores = [score[bar_chart_year - start_year] for score in bar_chart_filtered_scores]
     bar_chart_data = [{
         'x': bar_chart_filtered_provinces,
         'y': bar_chart_overall_scores,
