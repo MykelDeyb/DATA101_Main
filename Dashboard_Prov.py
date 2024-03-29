@@ -96,13 +96,13 @@ page2_layout = html.Div([
             id='province-checkboxes',
             options=[{'label': province, 'value': province} for province in provinces],
             value=[],
-            style={'overflowY': 'scroll', 'height': '1000px', 'font-size':'20px', 'margin-right':'2%'}
+            style={'overflowY': 'scroll', 'height': '1050px', 'font-size':'20px', 'margin-right':'2%'}
         ),
         html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
     ], style={'width': '20%', 'float': 'right', 'margin-left': '2px','border': '1px solid #ccc','font-size':'20px'}),
 ]),
         # Table province data
-        html.Div(id='table-container', style={'width': '50%', 'float': 'left', 'border': '1px solid #ccc',}),
+        html.Div(id='table-container', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
 
     # Line chart 
     html.Div([
