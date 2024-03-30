@@ -3,12 +3,14 @@ import plotly.express as px
 from dash import dcc, html, Input, Output
 from openpyxl import load_workbook
 import dash_bootstrap_components as dbc
+from pathlib import Path
 
-workbook = load_workbook(r'C:\Users\ASUS\OneDrive\Documents\Desktop\test\Datasets\Province_Data\Prov Dataset.xlsx')
+dataset_folder = Path('Datasets/')
+workbook_PROV = load_workbook(dataset_folder / 'Province_Data/Prov Dataset.xlsx')
 
-pillar_data = {}
+pillar_data_PROV = {}
 
-for sheet in workbook:
+for sheet in workbook_PROV:
     provinces = []
     scores = []
     distances_km = []
@@ -21,18 +23,18 @@ for sheet in workbook:
             distances_mi.append(row[2])
 
     pillar_name = sheet.title
-    pillar_data[pillar_name] = {
+    pillar_data_PROV[pillar_name] = {
         'provinces': provinces,
         'scores': scores,
         'distances_km': distances_km,
         'distances_mi': distances_mi
     }
 
-pillar_names = list(pillar_data.keys())
+pillar_names = list(pillar_data_PROV.keys())
 
 all_years = list(range(2014, 2024))
 
-provinces = list(set(province for pillar in pillar_names for province in pillar_data[pillar]['provinces']))
+provinces = list(set(province for pillar in pillar_names for province in pillar_data_PROV[pillar]['provinces']))
 
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -102,7 +104,7 @@ page2_layout = html.Div([
     ], style={'width': '20%', 'float': 'right', 'margin-left': '2px','border': '1px solid #ccc','font-size':'20px'}),
 ]),
         # Table province data
-        html.Div(id='table-container', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
+    html.Div(id='table-container_prov', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
 
     # Line chart 
     html.Div([
@@ -122,7 +124,7 @@ page2_layout = html.Div([
     Output('province-checkboxes', 'options'),
     [Input('province-search', 'value')]
 )
-def update_province_options(search_value):
+def update_province_options_prov(search_value):
     if search_value is None:
         return [{'label': province, 'value': province} for province in provinces]
     else:
@@ -143,7 +145,7 @@ def clear_selected_provinces(n_clicks):
 # Callback for table and line chart
 @app.callback(
     [
-        Output('table-container', 'children'),
+        Output('table-container_prov', 'children'),
         Output('line-chart', 'figure'),
     ],
     [
@@ -153,9 +155,9 @@ def clear_selected_provinces(n_clicks):
         Input('province-checkboxes', 'value'),
     ]
 )
-def update_data(pillar, start_year, end_year, selected_provinces):
+def update_data_prov(pillar, start_year, end_year, selected_provinces):
     # Filter data based on selected pillar and years
-    selected_data = pillar_data[pillar]
+    selected_data = pillar_data_PROV[pillar]
     filtered_provinces = []
     filtered_scores = []
     filtered_distances_km = []
@@ -212,9 +214,9 @@ def update_data(pillar, start_year, end_year, selected_provinces):
         Input('province-checkboxes', 'value')
     ]
 )
-def update_bar_chart(pillar, start_year, end_year, selected_provinces):
+def update_bar_chart_prov(pillar, start_year, end_year, selected_provinces):
     # Bar chart data
-    bar_chart_selected_data = pillar_data[pillar]
+    bar_chart_selected_data = pillar_data_PROV[pillar]
     bar_chart_filtered_provinces = []
     bar_chart_filtered_distances_mi = []
     for province, distance_mi in zip(bar_chart_selected_data['provinces'], bar_chart_selected_data['distances_mi']):

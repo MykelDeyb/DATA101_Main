@@ -6,44 +6,45 @@ from openpyxl import load_workbook
 from pathlib import Path
 
 dataset_folder = Path('Datasets/')
-workbook = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
+workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
 
-pillar_data = {}
+pillar_data_LGU = {}
 
-for sheet in workbook:
+for sheet in workbook_LGU:
     provinces = []
     scores = []
     distances_km = []
     distances_mi = []
-    categories = []
+    categories = [] 
     for row in sheet.iter_rows(min_row=2, values_only=True):
-        if len(row) >= 13:
+        if len(row) >= 13:  
             provinces.append(row[0])
             scores.append(row[1:11])
             distances_km.append(row[11])
             distances_mi.append(row[12])
-            categories.append(row[13])
+            categories.append(row[13])  
 
     pillar_name = sheet.title
-    pillar_data[pillar_name] = {
+    pillar_data_LGU[pillar_name] = {
         'provinces': provinces,
         'scores': scores,
         'distances_km': distances_km,
         'distances_mi': distances_mi,
-        'categories': categories
+        'categories': categories 
     }
 
-pillar_names = list(pillar_data.keys())
+pillar_names = list(pillar_data_LGU.keys())
+pillar_names = sorted(pillar_names)
 
 all_years = list(range(2014, 2024))
 
-provinces = list(set(province for pillar in pillar_names for province in pillar_data[pillar]['provinces']))
+provinces = list(set(province for pillar in pillar_names for province in pillar_data_LGU[pillar]['provinces']))
 pillar_descriptions = {
     'overall score': {
-        'Description': 'Overall score is the sum of scores on five main pillars which pool data from several sub-indicators. The higher the score of a city or municipality, the more competitive it is.'
+        'Description': 'The sum of scores on five main pillars which pool data from several sub-indicators. The higher the score of a city or municipality, the more competitive it is.'
     },
     'economic dynamism': {
-        'Description': 'Creates stable expansion of businesses and industries and higher employment. Matches output and productivity of the local economy with the local resources. Localities are centers of economic activities, and due to this, business expansion and job creation are easily observable in local settings.'
+        'Description': 'Refers to stable expansion of businesses and industries and higher employment. Matches output and productivity of the local economy with the local resources. Localities are centers of economic activities, and due to this, business expansion and job creation are easily observable in local settings.'
     },
     'government efficiency': {
         'Description': 'Refers to the quality and reliability of government services and government support for effective and sustainable productive expansion. This factor looks at government as an institution that is generally not corrupt; able to protect and enforce contracts; apply moderate and reasonable taxation and is able to regulate proactively.'
@@ -64,91 +65,112 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = dbc.Container([
-    # Header
-    html.H1("Dashboard", style={'margin-bottom': '20px', 'text-align': 'center'}),
-
+    # Row 1 
     dbc.Row([
-        # Table
+        dbc.Col(html.H1("Dashboard", style={'text-align': 'center'}), width=12)
+    ]),
+    dbc.Row([
+        dbc.Col([
+            html.Label('Level', style={'vertical-align': 'top'}),
+            dcc.Dropdown(
+                id='level-dropdown',
+                options=[
+                    {'label': 'Province', 'value': 'Province'},
+                    {'label': 'LGU', 'value': 'LGU'}
+                ],
+                value='LGU',
+                style={'width': '100px', 'margin-bottom': '10px', 'display': 'inline-block', 'margin-right': '20px'}
+            ),
+            html.Label('Pillar', style={'vertical-align': 'top'}),
+            dcc.Dropdown(
+                id='pillar-dropdown',
+                options=[{'label': pillar, 'value': pillar} for pillar in pillar_names],
+                value=pillar_names[0],
+                style={'width': '150px', 'margin-bottom': '10px', 'display': 'inline-block', 'margin-right': '20px'}
+            ),
+            html.Label('Starting Year', style={'vertical-align': 'top'}),
+            dcc.Dropdown(
+                id='start-year-dropdown',
+                options=[{'label': str(year), 'value': year} for year in all_years],
+                value=2014,
+                style={'width': '80px', 'margin-bottom': '10px', 'display': 'inline-block', 'margin-right': '20px'}
+            ),
+            html.Label('End Year', style={'vertical-align': 'top'}),
+            dcc.Dropdown(
+                id='end-year-dropdown',
+                options=[{'label': str(year), 'value': year} for year in all_years],
+                value=2023,
+                style={'width': '80px', 'display': 'inline-block', 'margin-bottom': '10px'}
+            ),
+        ], width=12)
+    ]),
+    # Row 2
+    dbc.Row([
+        # First column 
+        dbc.Col([
+        html.Div([
+            html.H3('LGU Information', style={'text-align': 'center', 'margin-bottom': '10px'}),
+            # Table on Province Distance
+            html.Div(id='table-container', style={'margin-bottom': '20px'})
+        ])
+    ], width=3),
+        # Second column
+        dbc.Col([
+        html.Div([
+            html.H3('Scores over Time', style={'text-align': 'center'}),
+            dcc.Graph(id='line-chart')
+        ])
+    ], width=6),
+        # Third column 
         dbc.Col([
             html.Div([
-                html.Div(id='table-container', style={'margin-top': '20px'})
-            ])
-        ], width=4),  # Set width to 4 to take up one-third of the row
-
-        # Charts
+                # Search bar
+                html.Label('Select Provinces'),
+                dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
+                dcc.Checklist(
+                    id='province-checkboxes',
+                    options=[{'label': province, 'value': province} for province in provinces],
+                    value=[],
+                    style={'overflowY': 'scroll', 'height': '400px'}
+                ),
+                html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
+            ], style={'margin-left': '20px'})
+        ], width=3)
+    ]),
+    # Row 3
+    dbc.Row([
+        # First column 
+        dbc.Col([
+            html.Div(id='pillar-info-container')
+        ], width=3),
+        # Second column 
         dbc.Col([
             html.Div([
-                # Line chart
-                dcc.Graph(id='line-chart', style={'width': '100%', 'height': '300px'}),
-                # Bar chart
+                html.H3('Composition of Overall Score', style={'text-align': 'center'}),
                 html.Div([
-                    html.H3('Composition of Overall Score', style={'text-align': 'center'}),
-                    html.Label('Pillar'),
+                    html.Label('Pillar', style={'margin-right': '10px'}),
                     dcc.Dropdown(
                         id='bar-pillar-dropdown',
                         options=[{'label': pillar, 'value': pillar} for pillar in pillar_names],
                         value=pillar_names[0],
-                        style={'width': '150px', 'margin-right': '20px'}
+                        style={'width': '150px', 'margin-bottom': '10px'}
                     ),
-                    html.Label('Year'),
+                    html.Label('Year', style={'margin-left': '20px', 'margin-right': '10px'}),
                     dcc.Dropdown(
                         id='bar-year-dropdown',
                         options=[{'label': str(year), 'value': year} for year in all_years],
-                        value=2014,
-                        style={'width': '80px'}
+                        value=2023,
+                        style={'width': '80px', 'margin-bottom': '10px'}
                     ),
-                    dcc.Graph(id='bar-chart')
-                ], style={'margin-top': '20px'})
-            ])
-        ], width=8),  # Set width to 8 to take up two-thirds of the row
-    ], justify='around'),
-
-    dbc.Row([
-        # Sidebar
-        dbc.Col([
-            html.Div([
-                # Sidebar
-                html.Div([
-                    # Search bar
-                    html.Label('Select Provinces'),
-                    dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
-                    dcc.Checklist(
-                        id='province-checkboxes',
-                        options=[{'label': province, 'value': province} for province in provinces],
-                        value=[],
-                        style={'overflowY': 'scroll', 'height': '400px'}
-                    ),
-                    html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
-                ], style={'margin-left': '20px'}),
-
-                # Pillar Dropdown
-                html.Label('Pillar'),
-                dcc.Dropdown(
-                    id='pillar-dropdown',
-                    options=[{'label': pillar, 'value': pillar} for pillar in pillar_names],
-                    value=pillar_names[0],
-                    style={'width': '150px', 'margin-right': '20px'}
-                ),
-                # Starting Year Dropdown
-                html.Label('Starting Year'),
-                dcc.Dropdown(
-                    id='start-year-dropdown',
-                    options=[{'label': str(year), 'value': year} for year in all_years],
-                    value=2014,
-                    style={'width': '80px', 'margin-right': '20px'}
-                ),
-                # End Year Dropdown
-                html.Label('End Year'),
-                dcc.Dropdown(
-                    id='end-year-dropdown',
-                    options=[{'label': str(year), 'value': year} for year in all_years],
-                    value=2023,
-                    style={'width': '80px'}
-                ),
-            ])
-        ], width=4)
-    ], justify='around')
+                ], style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center', 'margin-bottom': '20px'}),
+                dcc.Graph(id='bar-chart')
+            ]),
+        ], width=6),
+        # Third column 
+        dbc.Col([], width=3)
+    ])
 ], fluid=True)
+
 
 @app.callback(
     Output('province-checkboxes', 'options'),
@@ -192,12 +214,12 @@ def clear_selected_provinces(n_clicks):
 )
 def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pillar, bar_chart_year):
 
-    selected_data = pillar_data[pillar]
+    selected_data = pillar_data_LGU[pillar]
     filtered_provinces = []
     filtered_scores = []
     filtered_distances_km = []
     filtered_distances_mi = []
-    filtered_categories = []
+    filtered_categories = [] 
 
     color_palette = px.colors.qualitative.Plotly
     for index, (province, scores, distance_km, distance_mi, category) in enumerate(zip(selected_data['provinces'],
@@ -210,11 +232,11 @@ def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pill
             filtered_scores.append(scores)
             filtered_distances_km.append(distance_km)
             filtered_distances_mi.append(distance_mi)
-            filtered_categories.append(category)
+            filtered_categories.append(category)  
 
     table_rows = [
         html.Tr([
-            html.Th('Province/LGU'),
+            html.Th('LGU'),
             html.Th('Distance (km)'),
             html.Th('Distance (mi)'),
             html.Th('Category')
@@ -227,7 +249,7 @@ def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pill
             html.Td(province),
             html.Td(distance_km),
             html.Td(distance_mi),
-            html.Td(category)
+            html.Td(category) 
         ]))
 
     line_chart_data = []
@@ -241,7 +263,7 @@ def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pill
         })
 
     # Bar chart
-    bar_chart_selected_data = pillar_data[bar_chart_pillar]
+    bar_chart_selected_data = pillar_data_LGU[bar_chart_pillar]
     bar_chart_filtered_provinces = []
     bar_chart_filtered_scores = []
     for province, scores in zip(bar_chart_selected_data['provinces'], bar_chart_selected_data['scores']):
@@ -249,7 +271,7 @@ def update_data(pillar, start_year, end_year, selected_provinces, bar_chart_pill
             bar_chart_filtered_provinces.append(province)
             bar_chart_filtered_scores.append(scores)
 
-    bar_chart_overall_scores = [score[bar_chart_year - start_year] for score in bar_chart_filtered_scores]
+    bar_chart_overall_scores = [score[bar_chart_year - start_year] for score in bar_chart_filtered_scores]  
     bar_chart_data = [{
         'x': bar_chart_filtered_provinces,
         'y': bar_chart_overall_scores,
@@ -280,7 +302,7 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_provinces):
     if bar_chart_pillar in pillar_descriptions:
         description = pillar_descriptions[bar_chart_pillar]['Description']
 
-        selected_data = pillar_data[bar_chart_pillar]
+        selected_data = pillar_data_LGU[bar_chart_pillar]
         selected_scores = [score[bar_chart_year - 2014] for score in selected_data['scores']]
 
         table_rows = []
@@ -291,7 +313,7 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_provinces):
                 if isinstance(score, (int, float)):
                     table_rows.append(html.Tr([
                         html.Td(province),
-                        html.Td(str(score))
+                        html.Td(str(score)) 
                     ]))
                 else:
                     table_rows.append(html.Tr([
@@ -299,20 +321,22 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_provinces):
                         html.Td("Data Unavailable")
                     ]))
 
-        # LGU and Score Table
+         # LGU and Score Table
         info_table = html.Table([
-            html.Tr([
-                html.Th('Description')
-            ]),
-            html.Tr([
-                html.Td(description)
-            ])
-        ] + table_rows)
+        html.Tr([
+            html.Th(html.H3('Pillar Description'), style={'text-align': 'center', 'font-weight': 'bold'})  
+        ]),
+        html.Tr([
+            html.Td(html.B(bar_chart_pillar.upper()), style={'font-size': 'small', 'font-weight': 'bold'})
+        ]),
+        html.Tr([
+            html.Td(description, style={'text-align': 'justify'}) 
+        ])
+    ] + table_rows)
 
         return info_table
     else:
         return 'No information available for selected pillar'
-
-
 if __name__ == '__main__':
     app.run_server(debug=True)
+
