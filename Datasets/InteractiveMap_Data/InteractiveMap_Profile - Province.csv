@@ -1,0 +1,83 @@
+Province,Region,Population,Revenue,Rank
+Abra,CAR - Cordillera Administrative Region,"241,339","3,344,100,284.87",74
+Agusan Del Norte,REGION XIII (Caraga),"378,589","510,905,151.50",63
+Agusan Del Sur,REGION XIII (Caraga),"718,380","3,151,421,634.11",45
+Aklan,REGION VI (Western Visayas),"615,475","2,418,306,226.40",25
+Albay,REGION V (Bicol Region),"1,347,110","6,398,811,323.36",11
+Antique,REGION VI (Western Visayas),"609,679","1,669,452,149.00",61
+Apayao,CAR - Cordillera Administrative Region,"119,750","689,232,783.68",79
+Aurora,REGION III (Central Luzon),"236,172","746,776,449.34",36
+Basilan,BARMM - Bangsamoro Autonomous Region in Muslim Mindanao,"426,207","58,751,281.94",77
+Basilan (IX),REGION IX (Zamboanga Peninsula),"130,379","1,051,860,396.49",9
+Bataan,REGION III (Central Luzon),"853,373","5,067,936,855.81",12
+Batanes,REGION II (Cagayan Valley),"18,831","110,217,099.96",75
+Batangas Province,REGION IV-A (CALABARZON),"2,894,016","19,127,839,453.64",10
+Benguet,CAR - Cordillera Administrative Region,"447,698","1,766,229,072.79",41
+Biliran Province,REGION VIII (Eastern Visayas),"179,652","712,653,031.36",65
+Bohol,REGION VII (Central Visayas),"1,335,936","5,033,628,708.88",57
+Bukidnon,REGION X (Northern Mindanao),"1,444,394","3,546,195,438.11",39
+Bulacan,REGION III (Central Luzon),"3,708,890","15,614,692,793.11",8
+Cagayan,REGION II (Cagayan Valley),"1,228,221","1,474,224,579.60",18
+Camarines Norte,REGION V (Bicol Region),"609,226","999,362,863.83",58
+Camarines Sur,REGION V (Bicol Region),"2,029,840","4,863,175,384.08",20
+Camiguin,REGION X (Northern Mindanao),"93,042","257,420,168.65",5
+Capiz,REGION VI (Western Visayas),"795,583","2,033,953,130.43",53
+Catanduanes,REGION V (Bicol Region),"265,493","705,506,497.78",76
+Cavite Province,REGION IV-A (CALABARZON),"4,200,894","20,574,652,861.07",4
+Cebu Province,REGION VII (Central Visayas),"3,216,687","7,686,737,791.11",52
+Cotabato (North Cotabato),REGION XII (Soccsksargen),"1,385,470","7,257,139,182.07",14
+Davao De Oro,REGION XI (Davao Region),"753,739","3,491,934,828.61",22
+Davao Del Norte,REGION XI (Davao Region),"1,089,955","3,729,646,427.30",2
+Davao Del Sur,REGION XI (Davao Region),"681,994","2,886,751,014.62",6
+Davao Occidental,REGION XI (Davao Region),"317,104","765,161,167.54",43
+Davao Oriental,REGION XI (Davao Region),"572,732","548,417,439.08",30
+Dinagat Islands,REGION XIII (Caraga),"129,397","415,368,895.41",64
+Eastern Samar,REGION VIII (Eastern Visayas),"465,675","3,004,947,143.42",54
+Guimaras,REGION VI (Western Visayas),"184,372","817,524,296.84",33
+Ifugao,CAR - Cordillera Administrative Region,"204,700","1,078,499,822.81",34
+Ilocos Norte,REGION I (Ilocos Region),"600,829","6,785,748,524.92",23
+Ilocos Sur,REGION I (Ilocos Region),"701,947","16,006,017,695.66",37
+Iloilo Province,REGION VI (Western Visayas),"2,059,983","1,919,625,044.74",35
+Isabela,REGION II (Cagayan Valley),"1,741,214","3,142,137,019.05",27
+Kalinga,CAR - Cordillera Administrative Region,"218,018","105,868,078.87",44
+La Union,REGION I (Ilocos Region),"821,180","5,818,916,776.93",7
+Laguna,REGION IV-A (CALABARZON),"3,220,412","19,618,446,372.87",3
+Lanao Del Norte,REGION X (Northern Mindanao),"686,980","2,117,281,415.42",46
+Lanao Del Sur,BARMM - Bangsamoro Autonomous Region in Muslim Mindanao,"1,195,518","265,260,050.26",80
+Leyte Province,REGION VIII (Eastern Visayas),"1,767,272","3,598,922,137.52",59
+Maguindanao,BARMM - Bangsamoro Autonomous Region in Muslim Mindanao,"1,668,929","3,821,827,527.48",31
+Marinduque,REGION IV-B (MIMAROPA),"234,473","871,919,533.97",47
+Masbate Province,REGION V (Bicol Region),"904,472","2,017,423,837.08",78
+Misamis Occidental,REGION X (Northern Mindanao),"616,117","1,270,303,310.56",51
+Misamis Oriental,REGION X (Northern Mindanao),"990,349","4,427,136,579.47",19
+Mountain Province,CAR - Cordillera Administrative Region,"158,365","1,222,972,029.72",73
+Negros Occidental,REGION VI (Western Visayas),"2,576,185","8,576,166,047.68",62
+Negros Oriental,REGION VII (Central Visayas),"1,372,795","2,699,487,711.02",66
+Northern Samar,REGION VIII (Eastern Visayas),"644,230","904,544,041.20",55
+Nueva Ecija,REGION III (Central Luzon),"2,200,399","7,113,523,111.45",49
+Nueva Vizcaya,REGION II (Cagayan Valley),"464,704","921,962,531.00",56
+Occidental Mindoro,REGION IV-B (MIMAROPA),"503,210","1,415,979,439.38",28
+Oriental Mindoro,REGION IV-B (MIMAROPA),"852,309","318,200,871,960.75",26
+Palawan,REGION IV-B (MIMAROPA),"850,426","3,611,075,441.90",67
+Pampanga,REGION III (Central Luzon),"2,438,876","8,976,133,330.70",15
+Pangasinan,REGION I (Ilocos Region),"3,120,371","15,706,971,720.87",32
+Quezon,REGION IV-A (CALABARZON),"1,935,164","11,712,991,369.74",21
+Quirino,REGION II (Cagayan Valley),"211,995","154,213,948.96",40
+Rizal,REGION IV-A (CALABARZON),"3,217,678","15,534,061,475.27",1
+Romblon Province,REGION IV-B (MIMAROPA),"300,671","439,716,805.04",68
+Samar (Western Samar),REGION VIII (Eastern Visayas),"790,612","1,649,754,634.57",50
+Sarangani,REGION XII (Soccsksargen),"568,072","3,169,008,611.87",17
+Siquijor Province,REGION VII (Central Visayas),"97,982","312,180,207.57",38
+Sorsogon Province,REGION V (Bicol Region),"836,500","1,514,427,203.76",60
+South Cotabato,REGION XII (Soccsksargen),"981,304","5,951,032,270.94",13
+Southern Leyte,REGION VIII (Eastern Visayas),"429,573","956,920,043.64",72
+Sultan Kudarat,REGION XII (Soccsksargen),"821,236","4,913,288,160.99",24
+Sulu,BARMM - Bangsamoro Autonomous Region in Muslim Mindanao,"862,881","1,127,194,336.27",82
+Surigao Del Norte,REGION XIII (Caraga),"524,566","3,209,223,933.88",29
+Surigao Del Sur,REGION XIII (Caraga),"642,255","655,208,663.66",71
+Tarlac Province,REGION III (Central Luzon),"1,613,191","5,922,202,757.64",16
+Tawi-Tawi,BARMM - Bangsamoro Autonomous Region in Muslim Mindanao,"440,276","384,602,239.61",81
+Zambales,REGION III (Central Luzon),"649,615","2,910,087,434.35",42
+Zamboanga Del Norte,REGION IX (Zamboanga Peninsula),"1,049,520","3,595,769,946.96",69
+Zamboanga Del Sur,REGION IX (Zamboanga Peninsula),"1,053,018","3,122,176,709.72",48
+Zamboanga Sibugay,REGION IX (Zamboanga Peninsula),"669,840","565,999,005.82",70
