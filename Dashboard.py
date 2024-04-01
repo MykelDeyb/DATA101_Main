@@ -7,14 +7,11 @@ from pathlib import Path
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-<<<<<<< HEAD
-=======
 page1_layout = html.Div([
     html.H1('CMCI HUB'),
     html.P('Explore CMCI Data with Ease')
 ])
 
->>>>>>> 74ad9ce23c3ffd4e8866679b3e79689c70b8178b
 # Load datasets
 dataset_folder = Path('Datasets/')
 workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
@@ -545,8 +542,5 @@ def display_page(pathname):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     app.run_server(debug=True)
-=======
-    app.run_server(debug=True)
->>>>>>> 74ad9ce23c3ffd4e8866679b3e79689c70b8178b
+
