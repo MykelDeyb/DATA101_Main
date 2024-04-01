@@ -28,6 +28,7 @@ lgu_data = [row[0].value for row in lgu_sheet.iter_rows(min_row=2, max_col=1)]
 category_data = [row[1].value for row in lgu_sheet.iter_rows(min_row=2, max_col=2)]
 province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_col=4)]
 revenue_data = [row[4].value for row in lgu_sheet.iter_rows(min_row=2, max_col=5)]
+lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data if lgu_name is not None]
 
 def get_pillar_description(selected_pillar):
     pillar_descriptions = {
@@ -84,7 +85,7 @@ app.layout = dbc.Container([
             html.Label('Select LGU'),
             dcc.Dropdown(
                 id='lgu-dropdown',
-                options=[{'label': lgu, 'value': lgu} for lgu in lgu],
+                options=lgu_options,
                 value=[]
             ),
             # Pillar Dropdown
@@ -159,5 +160,28 @@ def update_labels(selected_lgu, selected_pillar):
     else:
         return '', '', '', ''
 
+# Bar Chart
+@app.callback(
+    Output('bar-chart', 'figure'),
+    Input('lgu-dropdown', 'value')
+)
+def update_bar_chart(selected_lgu):
+    if not selected_lgu:
+        return {}
+
+    lgu_index = lgu_data.index(selected_lgu) + 2
+    lgu_data_row = list(lgu_sheet.iter_rows(min_row=lgu_index, max_row=lgu_index, min_col=6, max_col=10, values_only=True))[0]
+    pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
+
+    fig = px.bar(
+        x=pillars,
+        y=lgu_data_row,
+        labels={'x': 'Pillar', 'y': 'Score'},
+        title=f'Scores per Pillar for {selected_lgu}'
+    )
+
+    return fig
+
 if __name__ == '__main__':
     app.run_server(debug=True)
+
