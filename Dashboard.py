@@ -5,6 +5,13 @@ from dash import dcc, html, Input, Output
 from openpyxl import load_workbook
 from pathlib import Path
 
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+page1_layout = html.Div([
+    html.H1('CMCI HUB'),
+    html.P('Explore CMCI Data with Ease')
+])
+
 # Load datasets
 dataset_folder = Path('Datasets/')
 workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
@@ -84,9 +91,6 @@ pillar_descriptions = {
         'Description': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity. It hinges mainly on the development of creative capital which are human resources, research capabilities, and networking capacities.'
     }
 }
-
-# Initialize the Dash app
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 # Define the app layout
 app.layout = dbc.Container([
@@ -214,8 +218,6 @@ app.layout = dbc.Container([
         html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
     ], style={'width': '20%', 'float': 'right', 'margin-left': '2px','border': '1px solid #ccc','font-size':'20px'}),
 ]),
-        # Table province data
-    html.Div(id='table-container_prov', style={'width': '30%', 'float': 'left', 'border': '1px solid #ccc',}),
 
     # Line chart 
     html.Div([
@@ -265,12 +267,9 @@ def clear_selected_provinces(n_clicks):
     else:
         raise dash.exceptions.PreventUpdate
 
-# Callback for table and line chart
+# Callback for line chart
 @app.callback(
-    [
-        Output('table-container_prov', 'children'),
-        Output('line-chart-prov', 'figure'),
-    ],
+    Output('line-chart-prov', 'figure'),
     [
         Input('pillar-dropdown', 'value'),
         Input('start-year-dropdown', 'value'),
@@ -283,50 +282,27 @@ def update_data_prov(pillar, start_year, end_year, selected_provinces):
     selected_data = pillar_data_PROV[pillar]
     filtered_provinces = []
     filtered_scores = []
-    filtered_distances_km = []
-    filtered_distances_mi = []
+   
     # Colors 
     color_palette = px.colors.qualitative.Plotly
-    for index, (province, scores, distance_km, distance_mi) in enumerate(zip(selected_data['provinces'],
-                                                                              selected_data['scores'],
-                                                                              selected_data['distances_km'],
-                                                                              selected_data['distances_mi'])):
+    for index, (province, scores) in enumerate(zip(selected_data['provinces'], selected_data['scores'])):
         if province in selected_provinces:
             filtered_provinces.append(province)
             filtered_scores.append(scores)
-            filtered_distances_km.append(distance_km)
-            filtered_distances_mi.append(distance_mi)
-
-    table_rows = []
-
-    # Add header row with spacing
-    table_rows.append(html.Tr([
-        html.Th('Province', style={'padding-right': '100px', 'font-size':'20px'}),
-        html.Th('Distance (km)', style={'padding-right': '20px','font-size':'20px'}),
-        html.Th('Distance (mi)', style={'font-size':'20px'})
-    ]))
-
-    # Add data rows
-    for province, distance_km, distance_mi in zip(filtered_provinces[0:85], filtered_distances_km[0:85], filtered_distances_mi[0:85]):
-        table_rows.append(html.Tr([
-            html.Td(province),
-            html.Td(distance_km),
-            html.Td(distance_mi)
-    ]))
 
     line_chart_data = []
     for province, scores, color in zip(filtered_provinces, filtered_scores, color_palette):
         line_chart_data.append({
-            'x': list(range(start_year -1, end_year)),
+            'x': list(range(start_year - 1, end_year)),
             'y': scores,
             'mode': 'lines',
             'name': province,
             'line': {'color': color}
         })
 
-    return html.Table(table_rows), {'data': line_chart_data, 'layout': {'title': f'{pillar} scores by Province over Time',
-                                                                         'xaxis': {'title': 'Year'},
-                                                                         'yaxis': {'title': 'Score'}}}
+    return {'data': line_chart_data, 'layout': {'title': f'{pillar} scores by Province over Time',
+                                                'xaxis': {'title': 'Year'},
+                                                'yaxis': {'title': 'Score'}}}
 
 @app.callback(
     Output('bar-chart-prov', 'figure'),
@@ -528,6 +504,42 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_LGUs):
         return info_table
     else:
         return 'No information available for selected pillar'
+
+
+page3_layout = html.Div([
+    html.H1('INTERACTIVE MAP'),
+    html.P('This is page 3.')
+])
+
+# Define navigation bar
+navbar = dbc.NavbarSimple(
+    children=[
+        html.Div(
+            [
+                dbc.Button("🌐 CMCI HUB", href="/page-1", color="secondary", className="me-3", style={'text-align':'left'}),
+                dbc.Button("📊 VISUALIZATION DASHBOARD", href="/page-2", color="secondary", className="me-3", style={''}),
+                dbc.Button("🗾 INTERACTIVE MAP", href="/page-3", color="secondary")
+            ],
+            className="d-flex justify-content-center"
+        )
+    ],
+    color="dark", 
+    dark=True,  
+    style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
+)
+
+@app.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/' or pathname == '/page-1':
+        return page1_layout
+    elif pathname == '/page-2':
+        return app.layout
+    elif pathname == '/page-3':
+        return page3_layout
+    else:
+        return '404 - Page not found'
+
+
 if __name__ == '__main__':
     app.run_server(debug=True)
-
