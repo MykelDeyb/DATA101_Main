@@ -7,6 +7,14 @@ from pathlib import Path
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+<<<<<<< HEAD
+=======
+page1_layout = html.Div([
+    html.H1('CMCI HUB'),
+    html.P('Explore CMCI Data with Ease')
+])
+
+>>>>>>> 74ad9ce23c3ffd4e8866679b3e79689c70b8178b
 # Load datasets
 dataset_folder = Path('Datasets/')
 workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
@@ -499,5 +507,46 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_LGUs):
         return info_table
     else:
         return 'No information available for selected pillar'
+
+
+page3_layout = html.Div([
+    html.H1('INTERACTIVE MAP'),
+    html.P('This is page 3.')
+])
+
+# Define navigation bar
+navbar = dbc.NavbarSimple(
+    children=[
+        html.Div(
+            [
+                dbc.Button("🌐 CMCI HUB", href="/page-1", color="secondary", className="me-3", style={'text-align':'left'}),
+                dbc.Button("📊 VISUALIZATION DASHBOARD", href="/page-2", color="secondary", className="me-3", style={''}),
+                dbc.Button("🗾 INTERACTIVE MAP", href="/page-3", color="secondary")
+            ],
+            className="d-flex justify-content-center"
+        )
+    ],
+    color="dark", 
+    dark=True,  
+    style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
+)
+
+@app.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/' or pathname == '/page-1':
+        return page1_layout
+    elif pathname == '/page-2':
+        return app.layout
+    elif pathname == '/page-3':
+        return page3_layout
+    else:
+        return '404 - Page not found'
+
+
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run_server(debug=True)
+=======
+    app.run_server(debug=True)
+>>>>>>> 74ad9ce23c3ffd4e8866679b3e79689c70b8178b
