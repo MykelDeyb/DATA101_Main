@@ -19,6 +19,32 @@ workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Pr
 
 # Map
 p_shapes = gpd.read_file(dataset_folder / 'InteractiveMap_Data/PH_Adm2_ProvDists.shp')
+p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Norte', 'adm2_en'] = 'Agusan Del Norte'
+p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Sur', 'adm2_en'] = 'Agusan Del Sur'
+p_shapes.loc[p_shapes['adm2_en'] == 'Batangas', 'adm2_en'] = 'Batangas Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Biliran', 'adm2_en'] = 'Biliran Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Cavite', 'adm2_en'] = 'Cavite Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Cebu', 'adm2_en'] = 'Cebu Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Cotabato', 'adm2_en'] = 'Cotabato (North Cotabato)'
+p_shapes.loc[p_shapes['adm2_en'] == 'Davao de Oro', 'adm2_en'] = 'Davao De Oro'
+p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Norte', 'adm2_en'] = 'Davao Del Norte'
+p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Sur', 'adm2_en'] = 'Davao Del Sur'
+p_shapes.loc[p_shapes['adm2_en'] == 'Iloilo', 'adm2_en'] = 'Iloilo Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Norte', 'adm2_en'] = 'Lanao Del Norte'
+p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Sur', 'adm2_en'] = 'Lanao Del Sur'
+p_shapes.loc[p_shapes['adm2_en'] == 'Leyte', 'adm2_en'] = 'Leyte Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Masbate', 'adm2_en'] = 'Masbate Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Romblon', 'adm2_en'] = 'Romblon Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Samar', 'adm2_en'] = 'Samar (Western Samar)'
+p_shapes.loc[p_shapes['adm2_en'] == 'Siquijor', 'adm2_en'] = 'Siquijor Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Sorsogon', 'adm2_en'] = 'Sorsogon Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Norte', 'adm2_en'] = 'Surigao Del Norte'
+p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Sur', 'adm2_en'] = 'Surigao Del Sur'
+p_shapes.loc[p_shapes['adm2_en'] == 'Tarlac', 'adm2_en'] = 'Tarlac Province'
+p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Norte', 'adm2_en'] = 'Zamboanga Del Norte'
+p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Sur', 'adm2_en'] = 'Zamboanga Del Sur'
+p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Norte', 'adm2_en'] = 'Maguindanao'
+p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Sur', 'adm2_en'] = 'Maguindanao'
 p_score = pd.read_csv(dataset_folder / 'Province_Data/Overall Score.csv', encoding='latin1')
 
 
