@@ -85,6 +85,16 @@ pillar_descriptions = {
     }
 }
 
+pillar_images = {
+    'Overall Score': 'https://i.ibb.co/smhd96w/overall-score-3.png',
+    'Economic Dynamism': 'https://i.ibb.co/hWH7fsX/economic-dynamism.png',
+    'Government Efficiency': 'https://i.ibb.co/q5bc8RC/government-efficiency.png',
+    'Infrastructure': 'https://i.ibb.co/6bFxX3H/infrastructure.png',
+    'Resiliency': 'https://i.ibb.co/M5GWyrt/resiliency.png',
+    'Innovation': 'https://i.ibb.co/BGcySdJ/innovation.png'
+}
+
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -161,62 +171,79 @@ page2_layout = dbc.Container([
     dbc.Row([
         # First column 
         dbc.Col([
-            html.Div([
-                html.H3('LGU Information', style={'text-align': 'center', 'margin-bottom': '10px'}),
-                html.Div(id='table-container', style={'margin-bottom': '20px'})
-            ])
+            dbc.Card([
+                dbc.CardBody([
+                    html.Div(id='pillar-info-container')
+                ])
+            ], color='light', style={'margin-bottom': '20px'})
         ], id='row2-col1', width=3),
-        # Second column 
+        # Second column
         dbc.Col([
-            html.Div([
-                html.H3('Scores over Time', style={'text-align': 'center'}),
-                dcc.Graph(id='line-chart')
-            ])
+            dbc.Card([
+                dbc.CardBody([
+                    html.Div([
+                        html.H3('Scores over Time', style={'text-align': 'center'}),
+                        dcc.Graph(id='line-chart')
+                    ])
+                ])
+            ], color='light', style={'margin-bottom': '20px'})
         ], id='row2-col2', width=6),
+    
+
         # Third column 
         dbc.Col([
-            html.Div([
-                html.Label('Select LGUs',style={'fontWeight': 'bold', 'margin-right':'40px'}),
-                dcc.Input(id='LGU-search', type='text', placeholder='Search LGUs...'),
-                dcc.Checklist(
-                    id='LGU-checkboxes',
-                    options=[{'label': LGU, 'value': LGU} for LGU in LGUs],
-                    value=[],
-                    style={'overflowY': 'scroll', 'height': '400px'}
-                ),
-                html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
-            ], style={'margin-left': '20px'})
-        ], id='row2-col3', width=3)
+                dbc.Card([
+                    dbc.CardBody([
+                        html.Div([
+                            html.H4('Select LGUs', style={'display': 'block', 'text-align': 'center', 'margin-bottom': '5px'}),
+                            # Search bar
+                            dcc.Input(id='LGU-search', type='text', placeholder='Search LGUs...'),
+                            dcc.Checklist(
+                                id='LGU-checkboxes',
+                                options=[{'label': LGU, 'value': LGU} for LGU in LGUs],
+                                value=[],
+                                style={'overflowY': 'scroll', 'height': '400px'}
+                            ),
+                            html.Button('Clear Selection', id='clear-selection-button', n_clicks=0)
+                        ], style={'margin-left': '20px'})
+                    ])
+                ], color='light', style={'margin-bottom': '20px'})
+            ], id='row2-col3', width=3)
     ], id='row2', style={'display': 'none'}),
 
     # Row 3 (Displayed conditionally)
     dbc.Row([
         # First column 
         dbc.Col([
-            html.Div(id='pillar-info-container')
+            dbc.Card([
+                dbc.CardBody([
+                    html.Div([
+                        html.H3('LGU Information', style={'text-align': 'center', 'margin-bottom': '10px'}),
+                        # Table on lgu Distance
+                        html.Div(id='table-container', style={'margin-bottom': '20px'})
+                    ])
+                ])
+            ], color='light', style={'margin-bottom': '20px'})
         ], id='row3-col1', width=3),
         # Second column 
         dbc.Col([
-            html.Div([
-                html.H3('Composition of Overall Score', style={'text-align': 'center'}),
-                html.Div([
-                    html.Label('Pillar', style={'margin-right': '10px'}),
-                    dcc.Dropdown(
-                        id='bar-pillar-dropdown',
-                        options=[{'label': pillar, 'value': pillar} for pillar in pillar_names],
-                        value=pillar_names[0],
-                        style={'width': '150px', 'margin-bottom': '10px'}
-                    ),
-                    html.Label('Year', style={'margin-left': '20px', 'margin-right': '10px'}),
-                    dcc.Dropdown(
-                        id='bar-year-dropdown-lgu',
-                        options=[{'label': str(year), 'value': year} for year in all_years],
-                        value=2023,
-                        style={'width': '80px', 'margin-bottom': '10px'}
-                    ),
-                ], style={'display': 'flex', 'align-items': 'center', 'justify-content': 'center', 'margin-bottom': '20px'}),
-                dcc.Graph(id='bar-chart')
-            ]),
+            dbc.Card([
+                dbc.CardBody([
+                    html.Div([
+                        html.H3('Composition of Overall Score', style={'text-align': 'center'}),
+                        html.Div([
+                            html.Label('Select Year', style={'display': 'inline-block', 'vertical-align': 'middle', 'margin-right': '10px'}),
+                            dcc.Dropdown(
+                                id='bar-year-dropdown-lgu',
+                                options=[{'label': str(year), 'value': year} for year in all_years],
+                                value=2023,
+                                style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
+                            ),
+                        ], style={'text-align': 'center'}),
+                        dcc.Graph(id='bar-chart')
+                    ])
+                ])
+            ], color='light', style={'margin-bottom': '20px'})
         ], id='row3-col2', width=6),
         # Third column 
         dbc.Col([], id='row3-col3', width=3)
@@ -418,83 +445,76 @@ def clear_selected_LGUs(n_clicks):
         Input('start-year-dropdown', 'value'),
         Input('end-year-dropdown', 'value'),
         Input('LGU-checkboxes', 'value'),
-        Input('bar-pillar-dropdown', 'value'),
         Input('bar-year-dropdown-lgu', 'value')
     ]
 )
-def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_pillar, bar_chart_year):
+def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
 
-    selected_data = pillar_data_LGU[pillar]
-    filtered_LGUs = []
-    filtered_scores = []
-    filtered_distances_km = []
-    filtered_distances_mi = []
-    filtered_categories = [] 
 
-    color_palette = px.colors.qualitative.Plotly
-    for index, (LGU, scores, distance_km, distance_mi, category) in enumerate(zip(selected_data['LGUs'],
-                                                                                       selected_data['scores'],
-                                                                                       selected_data['distances_km'],
-                                                                                       selected_data['distances_mi'],
-                                                                                       selected_data['categories'])):
-        if LGU in selected_LGUs:
-            filtered_LGUs.append(LGU)
-            filtered_scores.append(scores)
-            filtered_distances_km.append(distance_km)
-            filtered_distances_mi.append(distance_mi)
-            filtered_categories.append(category)  
+    # Filtered LGUs
+    filtered_LGUs = selected_LGUs
 
+
+    # Table
     table_rows = [
         html.Tr([
-            html.Th('LGU'),
-            html.Th('Distance (km)'),
-            html.Th('Distance (mi)'),
-            html.Th('Category')
+            html.Th('LGU', style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),  
+            html.Th('Category', style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),
+            html.Th('Distance from MNL (km)', style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),
+            html.Th('Distance from MNL (mi)', style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'})
         ])
     ]
-    for LGU, distance_km, distance_mi, category, color in zip(filtered_LGUs, filtered_distances_km,
-                                                                   filtered_distances_mi, filtered_categories,
-                                                                   color_palette):
+
+
+    for LGU in filtered_LGUs:
+        LGU_index = pillar_data_LGU[pillar]['LGUs'].index(LGU)
+        distances_km = pillar_data_LGU[pillar]['distances_km'][LGU_index]
+        distances_mi = pillar_data_LGU[pillar]['distances_mi'][LGU_index]
+        category = pillar_data_LGU[pillar]['categories'][LGU_index]
         table_rows.append(html.Tr([
-            html.Td(LGU),
-            html.Td(distance_km),
-            html.Td(distance_mi),
-            html.Td(category) 
+            html.Td(LGU, style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),  
+            html.Td(category, style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),
+            html.Td(distances_km, style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'}),
+            html.Td(distances_mi, style={'border': '1px solid black', 'font-size': '14px', 'text-align': 'center'})
         ]))
 
+
+    # Line chart
     line_chart_data = []
-    for LGU, scores, color in zip(filtered_LGUs, filtered_scores, color_palette):
+    for LGU in filtered_LGUs:
+        LGU_index = pillar_data_LGU[pillar]['LGUs'].index(LGU)
+        scores = pillar_data_LGU[pillar]['scores'][LGU_index]  
         line_chart_data.append({
             'x': list(range(start_year, end_year + 1)),
-            'y': scores,
+            'y': scores[start_year - 2014:end_year - 2014 + 1],
             'mode': 'lines',
             'name': LGU,
-            'line': {'color': color}
         })
 
+
     # Bar chart
-    bar_chart_selected_data = pillar_data_LGU[bar_chart_pillar]
-    bar_chart_filtered_LGUs = []
-    bar_chart_filtered_scores = []
-    for LGU, scores in zip(bar_chart_selected_data['LGUs'], bar_chart_selected_data['scores']):
-        if LGU in selected_LGUs:
-            bar_chart_filtered_LGUs.append(LGU)
-            bar_chart_filtered_scores.append(scores)
-
-    bar_chart_overall_scores = [score[bar_chart_year - start_year] for score in bar_chart_filtered_scores]  
-    bar_chart_data = [{
-        'x': bar_chart_filtered_LGUs,
-        'y': bar_chart_overall_scores,
-        'type': 'bar',
-        'marker': {'color': color_palette}
-    }]
-
+    bar_chart_data = []
+    selected_year_index = bar_chart_year - 2014
+    filtered_pillar_names = [p for p in pillar_names if p != 'overall score']
+    for j, pillar_name in enumerate(filtered_pillar_names):
+        pillar_scores = []  
+        for LGU in filtered_LGUs:
+            LGU_index = pillar_data_LGU[pillar_name]['LGUs'].index(LGU)
+            scores = pillar_data_LGU[pillar_name]['scores'][LGU_index]  
+            score = scores[selected_year_index] if scores[selected_year_index] != '-' else 0
+            pillar_scores.append(score)
+       
+        bar_chart_data.append({
+            'x': filtered_LGUs,  
+            'y': pillar_scores,  
+            'name': pillar_name,  
+            'type': 'bar',
+        })
     bar_chart_layout = {
-        'title': 'Composition of Overall score',
+        'title': f'Composition of Overall Score for {bar_chart_year}',
         'xaxis': {'title': 'LGU'},
-        'yaxis': {'title': 'Overall Score'}
+        'yaxis': {'title': 'Score'}
     }
-
     return html.Table(table_rows), {'data': line_chart_data, 'layout': {'title': f'{pillar} scores by LGU over Time',
                                                                          'xaxis': {'title': 'Year'},
                                                                          'yaxis': {'title': 'Score'}}}, {
@@ -502,49 +522,18 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_pillar, b
 
 @app.callback(
     Output('pillar-info-container', 'children'),
-    [
-        Input('bar-pillar-dropdown', 'value'),
-        Input('bar-year-dropdown-lgu', 'value'),
-        Input('LGU-checkboxes', 'value')
-    ],
+    [Input('pillar-dropdown', 'value')]
 )
-def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_LGUs):
-    if bar_chart_pillar in pillar_descriptions:
-        description = pillar_descriptions[bar_chart_pillar]['Description']
-
-        selected_data = pillar_data_LGU[bar_chart_pillar]
-        selected_scores = [score[bar_chart_year - 2014] for score in selected_data['scores']]
-
-        table_rows = []
-
-        # Table for LGU and Score based on Bar Chart
-        for LGU, score in zip(selected_data['LGUs'], selected_scores):
-            if LGU in selected_LGUs:
-                if isinstance(score, (int, float)):
-                    table_rows.append(html.Tr([
-                        html.Td(LGU),
-                        html.Td(str(score)) 
-                    ]))
-                else:
-                    table_rows.append(html.Tr([
-                        html.Td(LGU),
-                        html.Td("Data Unavailable")
-                    ]))
-
-         # LGU and Score Table
-        info_table = html.Table([
-        html.Tr([
-            html.Th(html.H3('Pillar Description'), style={'text-align': 'center', 'font-weight': 'bold'})  
-        ]),
-        html.Tr([
-            html.Td(html.B(bar_chart_pillar.upper()), style={'font-size': 'small', 'font-weight': 'bold'})
-        ]),
-        html.Tr([
-            html.Td(description, style={'text-align': 'justify'}) 
-        ])
-    ] + table_rows)
-
-        return info_table
+def update_pillar_info(pillar):
+    if pillar in pillar_descriptions:
+        description = pillar_descriptions[pillar]['Description']
+        image_url = pillar_images.get(pillar, '') 
+        return html.Div([
+            html.H3('Pillar Description', style={'text-align': 'center'}),
+            html.H5(f'{pillar.upper()}', style={'text-align': 'center'}),
+            html.Img(src=image_url, style={'display': 'block', 'margin': 'auto','width': '50%'}), 
+            html.P(description, style={'text-align': 'justify'})
+        ], style={'margin': 'auto', 'width': '80%', 'height':'100%'})
     else:
         return 'No information available for selected pillar'
 
