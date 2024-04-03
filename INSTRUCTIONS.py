@@ -5,7 +5,7 @@
 
 # "How to Pull Files from Repository and Push Files to Repository"
  git pull origin master 
- git add .
+git add .
  git status
  git commit -m "New Edit1"
  git push origin master
