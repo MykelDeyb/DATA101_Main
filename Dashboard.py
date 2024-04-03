@@ -5,8 +5,6 @@ from dash import dcc, html, Input, Output
 from openpyxl import load_workbook
 from pathlib import Path
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
 # Load datasets
 dataset_folder = Path('Datasets/')
 workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
@@ -87,8 +85,15 @@ pillar_descriptions = {
     }
 }
 
-# Define the app layout
-app.layout = dbc.Container([
+
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+
+page1_layout = html.Div([
+    html.H1('CMCI HUB'),
+    html.P('Explore CMCI Data with Ease')
+])
+
+page2_layout = dbc.Container([
     # Header
     html.Div([
         html.H1("DASHBOARD", style={'text-align': 'left', 'font-size': '50px'}),
@@ -183,7 +188,7 @@ app.layout = dbc.Container([
                     ),
                     html.Label('Year', style={'margin-left': '20px', 'margin-right': '10px'}),
                     dcc.Dropdown(
-                        id='bar-year-dropdown',
+                        id='bar-year-dropdown-lgu',
                         options=[{'label': str(year), 'value': year} for year in all_years],
                         value=2023,
                         style={'width': '80px', 'margin-bottom': '10px'}
@@ -228,6 +233,28 @@ app.layout = dbc.Container([
     ])
     ], id='row4', style={'display': 'none'})
 ], fluid=True)
+
+page3_layout = html.Div([
+    html.H1('INTERACTIVE MAP'),
+    html.P('This is page 3.')
+])
+
+# Define navigation bar
+navbar = dbc.NavbarSimple(
+    children=[
+        html.Div(
+            [
+                dbc.Button("🌐 CMCI HUB", href="/page-1", color="secondary", className="me-3"),
+                dbc.Button("📊 VISUALIZATION DASHBOARD", href="/page-2", color="secondary", className="me-3"),
+                dbc.Button("🗾 INTERACTIVE MAP", href="/page-3", color="secondary")
+            ],
+            className="d-flex justify-content-center"
+        )
+    ],
+    color="dark", 
+    dark=True,  
+    style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
+)
 
 @app.callback(
     [Output('row2', 'style'), Output('row3', 'style'), Output('row4', 'style')],
@@ -371,7 +398,7 @@ def clear_selected_LGUs(n_clicks):
         Input('end-year-dropdown', 'value'),
         Input('LGU-checkboxes', 'value'),
         Input('bar-pillar-dropdown', 'value'),
-        Input('bar-year-dropdown', 'value')
+        Input('bar-year-dropdown-lgu', 'value')
     ]
 )
 def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_pillar, bar_chart_year):
@@ -456,9 +483,9 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_pillar, b
     Output('pillar-info-container', 'children'),
     [
         Input('bar-pillar-dropdown', 'value'),
-        Input('bar-year-dropdown', 'value'),
+        Input('bar-year-dropdown-lgu', 'value'),
         Input('LGU-checkboxes', 'value')
-    ]
+    ],
 )
 def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_LGUs):
     if bar_chart_pillar in pillar_descriptions:
@@ -500,6 +527,24 @@ def update_pillar_info(bar_chart_pillar, bar_chart_year, selected_LGUs):
     else:
         return 'No information available for selected pillar'
 
+
+@app.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == '/' or pathname == '/page-1':
+        return page1_layout
+    elif pathname == '/page-2':
+        return page2_layout
+    elif pathname == '/page-3':
+        return page3_layout
+    else:
+        return '404 - Page not found'
+
+app.layout = html.Div([
+    dcc.Location(id='url', refresh=False),
+    navbar,
+    html.Div(id='page-content')
+])
 
 if __name__ == '__main__':
     app.run_server(debug=True)
