@@ -1,4 +1,4 @@
-import dash
+import dash 
 import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output
@@ -167,7 +167,8 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
+
 
 page1_layout = html.Div(
     style={'background-image': 'url(assets/phmap1.png)', 'height': '100vh','background-repeat': 'no-repeat','background-size': 'cover', 'position': 'relative'},
@@ -308,7 +309,7 @@ page2_layout = dbc.Container([
                                 style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
                             ),
                         ], style={'text-align': 'center'}),
-                        dcc.Graph(id='bar-chart')
+                        dcc.Graph(id='bar-chart'),
                     ])
                 ])
             ], color='light', style={'margin-bottom': '20px'})
