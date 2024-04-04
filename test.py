@@ -177,11 +177,6 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-<<<<<<< HEAD
-=======
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -568,11 +563,6 @@ page2_layout = dbc.Container([
     ], width=4),
 ], id='row4', style={'display': 'none'})
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
 ], fluid=True)
 
 page3_layout = dbc.Container([
@@ -1090,17 +1080,17 @@ def update_choropleth(map_year):
         labels={str(map_year): 'Overall CMCI Score'},
         )
 
-    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#ADD8E6")
+    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
     initial_fig.update_layout(
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
-        paper_bgcolor="#ADD8E6",
+        paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         #padding=dict(l=0, r=0, t=0, b=0),  # Reduce padding to increase map display size
         width=None,
         height=1000, 
         geo=dict(
             visible=False,
-            bgcolor="#ADD8E6",
+            bgcolor="#C9D1D2",
             center={'lat': 12.8797, 'lon': 121.7740}, 
             projection_scale=40 , 
             projection_type='mercator',  
@@ -1137,13 +1127,8 @@ def update_choropleth(map_year, province):
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
-<<<<<<< HEAD
         width=None,  
-        height=600, 
-=======
-        # width=None,   # Set the width of the entire figure
-        height=900, 
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
+        height=885, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
