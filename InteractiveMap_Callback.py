@@ -17,24 +17,25 @@ all_years = list(range(2014, 2024))
 
 # Map
 file_paths = [
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-bicolregionregionv.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-cagayanvalleyregionii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-calabarzonregioniva.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-caragaregionxiii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-centralluzonregioniii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-centralvisayasregionvii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-davaoregionregionxi.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-easternvisayasregionviii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-ilocosregionregioni.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-metropolitanmanila.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-mimaroparegionivb.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-northernmindanaoregionx.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-soccsksargenregionxii.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-westernvisayasregionvi.json",
-    "/Users/kylacansana/Downloads/Province JSON/provinces-region-zamboangapeninsularegionix.json"
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-bicolregionregionv.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cagayanvalleyregionii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-calabarzonregioniva.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-caragaregionxiii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralluzonregioniii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralvisayasregionvii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-davaoregionregionxi.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-easternvisayasregionviii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-ilocosregionregioni.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-metropolitanmanila.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-mimaroparegionivb.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-northernmindanaoregionx.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-soccsksargenregionxii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-westernvisayasregionvi.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-zamboangapeninsularegionix.json"
 ]
+
 
 # Read each file and append to a list
 ph_list = [gpd.read_file(file) for file in file_paths]
@@ -231,7 +232,7 @@ app.layout = dbc.Container([
    ],
    [
        Input('lgu-dropdown', 'value'),
-       Input('pillar-dropdown', 'value')
+       Input('pillar-dropdown-map', 'value')
    ]
 )
 def update_labels(selected_lgu, selected_pillar):
@@ -249,7 +250,7 @@ def update_labels(selected_lgu, selected_pillar):
 
 # Bar Chart
 @app.callback(
-   Output('bar-chart', 'figure'),
+   Output('bar-chart-map', 'figure'),
    Input('lgu-dropdown', 'value')
 )
 def update_bar_chart(selected_lgu):
