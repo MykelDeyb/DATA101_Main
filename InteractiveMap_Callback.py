@@ -179,107 +179,124 @@ app.layout = dbc.Container([
        
    # First column
    dbc.Col([
-       dbc.Row([
-       dcc.Dropdown(
-                                id='map-year-dropdown-province',
-                                options=[{'label': str(year), 'value': year} for year in all_years],
-                                value=2023,
-                                style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
-                            ),
-       ]),
-       dbc.Row([
-        html.Div([
-        html.H3('Choropleth Map', style={'text-align': 'center', 'margin-bottom': '10px'}),
-        dcc.Graph(id='choropleth-map')  # Display the initial choropleth map
-    ])
-       ]),
+       # Card 1, Entire First Column
+       dbc.Card([
+           dbc.CardBody([
+           dbc.Row([
+                dbc.Row([
+                    html.Div([
+                    html.H3('Choropleth Map', style={'text-align': 'center', 'margin-bottom': '10px'}),
+                    dbc.Row([
+                    html.Label('Select Year', style={'font-weight': 'bold'}),
+                    dcc.Dropdown(
+                                    id='map-year-dropdown-province',
+                                    options=[{'label': str(year), 'value': year} for year in all_years],
+                                    value=2023,
+                                    style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
+                                )])
+                    
+                ]),
+                    dcc.Graph(id='choropleth-map')  # Display the initial choropleth map
+                ])
+            ]),
+            ])
+       ], color='light')
+       
        
    ]),
   
    # Second column
    dbc.Col([
        html.Div([
-           html.H3('Province Profile', style={'text-align': 'center'}),
-           html.Label('Select Province'),
-           dcc.Dropdown(
-               id='province-dropdown',
-               options=sorted(province_options, key=lambda d: d['label']),
-               value=[]
-           ),
-           dbc.Row([
-               dbc.Col([
-                   html.Label('Region'),
-                   html.Div(id='region-label')
-               ]),
-               dbc.Col([
-                   html.Label('Population'),
-                   html.Div(id='population-label')
-               ]),
-               dbc.Col([
-                   html.Label('Revenue'),
-                   html.Div(id='province-revenue-label')
-               ]),
-               dbc.Col([
-                   html.Label('Rank'),
-                   html.Div(id='rank-label')
-               ])
-           ]),
-           html.H3('LGU Profile', style={'text-align': 'center'}),
+           # Card 2, Top Right
+           dbc.Card([dbc.CardBody([
+                dbc.Row([
+                html.H3('Province Profile', style={'text-align': 'center'}),
+                html.Label('Select Province', style={'font-weight': 'bold'}),
+                dcc.Dropdown(
+                    id='province-dropdown',
+                    options=sorted(province_options, key=lambda d: d['label']),
+                    value=[]
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        html.Label('Region', style={'font-weight': 'bold'}),
+                        html.Div(id='region-label')
+                    ]),
+                    dbc.Col([
+                        html.Label('Population', style={'font-weight': 'bold'}),
+                        html.Div(id='population-label')
+                    ]),
+                    dbc.Col([
+                        html.Label('Revenue', style={'font-weight': 'bold'}),
+                        html.Div(id='province-revenue-label')
+                    ]),
+                    dbc.Col([
+                        html.Label('Rank', style={'font-weight': 'bold'}),
+                        html.Div(id='rank-label')
+                    ])
+                ], style={'margin-bottom': '20px'})
+                ])
+           ])], color='light'),
 
-           dbc.Row([
-               
-           # LGU Dropdown
-           html.Label('Select LGU'),
-           dcc.Dropdown(
-               id='lgu-dropdown',
-               options=lgu_options,
-               value=[]
-           ),
-           dbc.Row([
-               dbc.Col([
-                   html.Label('Province'),
-                   html.Div(id='province-label')
-               ]),
-               dbc.Col([
-                   html.Label('Category'),
-                   html.Div(id='category-label')
-               ]),
-               dbc.Col([
-                   html.Label('Revenue'),
-                   html.Div(id='revenue-label')
-               ])
-           ]),
-            dbc.Row([
-                html.Div([
-                    html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
-                    dcc.Graph(id='bar-chart-map')
-                ])
-            ]),
-            dbc.Row([
-                dbc.Col([
-                    html.Label('Select Pillar'),
-                    dcc.Dropdown(
-                        id='pillar-dropdown-map',
-                        options=[
-                            {'label': 'Resiliency', 'value': 'Resiliency'},
-                            {'label': 'Government Efficiency', 'value': 'Government Efficiency'},
-                            {'label': 'Innovation', 'value': 'Innovation'},
-                            {'label': 'Economic Dynamism', 'value': 'Economic Dynamism'},
-                            {'label': 'Infrastructure', 'value': 'Infrastructure'},
-                        ],
-                        value=[]
-                    ),
+           # Card 3, Bottom Right
+           dbc.Card([dbc.CardBody([
+               dbc.Row([
+               html.H3('LGU Profile', style={'text-align': 'center'}),
+                # LGU Dropdown
+                html.Label('Select LGU', style={'font-weight': 'bold'}),
+                dcc.Dropdown(
+                    id='lgu-dropdown',
+                    options=lgu_options,
+                    value=[]
+                ),
+                dbc.Row([
+                    dbc.Col([
+                        html.Label('Province', style={'font-weight': 'bold'}),
+                        html.Div(id='province-label')
+                    ]),
+                    dbc.Col([
+                        html.Label('Category', style={'font-weight': 'bold'}),
+                        html.Div(id='category-label')
+                    ]),
+                    dbc.Col([
+                        html.Label('Revenue', style={'font-weight': 'bold'}),
+                        html.Div(id='revenue-label')
+                    ])
                 ]),
-                dbc.Col([
-                    html.Label('Pillar Description'),
-                    html.Div(id='pillar-description')
-                ])
-            ]),
-        ])
+                dbc.Row([
+                    html.Div([
+                        html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
+                        dcc.Graph(id='bar-chart-map')
+                    ])
+                ], style={'margin-top': '20px'}),
+                dbc.Row([
+                    dbc.Col([
+                        html.Label('Select Pillar', style={'font-weight': 'bold'}),
+                        dcc.Dropdown(
+                            id='pillar-dropdown-map',
+                            options=[
+                                {'label': 'Resiliency', 'value': 'Resiliency'},
+                                {'label': 'Government Efficiency', 'value': 'Government Efficiency'},
+                                {'label': 'Innovation', 'value': 'Innovation'},
+                                {'label': 'Economic Dynamism', 'value': 'Economic Dynamism'},
+                                {'label': 'Infrastructure', 'value': 'Infrastructure'},
+                            ],
+                            value=[]
+                        ),
+                    ]),
+                    dbc.Col([
+                        html.Label('Pillar Description', style={'font-weight': 'bold'}),
+                        html.Div(id='pillar-description')
+                    ])
+                ]),
+            ])
+           ])], color='light', style={'margin-top': '10px'})
+           
    ]),
    ])
    ])
-])
+], style={'margin-top': '20px'})
 
 # Descriptions
 @app.callback(
@@ -385,6 +402,7 @@ def update_choropleth(map_year, province):
         hover_name='PROVINCE',
         hover_data={str(map_year): True},  # Show CMCI score when hovering
         labels={str(map_year): 'Overall CMCI Score'},
+        height=1200
     )
 
     initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
@@ -392,8 +410,8 @@ def update_choropleth(map_year, province):
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
-        width=None,   # Set the width of the entire figure
-        height=900, 
+        # width=None,   # Set the width of the entire figure
+        height=1200, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
