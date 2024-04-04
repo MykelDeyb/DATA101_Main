@@ -167,7 +167,7 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
 
 page1_layout = html.Div(
@@ -218,7 +218,7 @@ page2_layout = dbc.Container([
                 id='pillar-dropdown',
                 options=[{'label': pillar, 'value': pillar} for pillar in pillar_names],
                 value='Overall Score',
-                style={'width': '150px', 'display': 'inline-block'}
+                style={'width': '200px', 'display': 'inline-block'}
             ),
             # Starting Year Dropdown
             html.Label('Starting Year',style={'margin-top':'10px'}),
