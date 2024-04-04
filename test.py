@@ -525,20 +525,24 @@ page2_layout = dbc.Container([
 
     # Map
     dbc.Col([
-        dcc.Dropdown(
-            id='map-year-dropdown-province-1',
-            options=[{'label': str(year), 'value': year} for year in all_years],
-            value=2023,
-            style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
-        ),
-        html.Div([
-            html.H3('Overall CMCI Score per Province', style={'text-align': 'left', 'margin-bottom': '10px'}),
-            dcc.Loading(
-                id="loading-choropleth-map",
-                type="default",
-                children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
-            ) 
-        ], style={'text-align': 'center'}),
+            dbc.Card([
+                        dbc.CardBody([
+                            dcc.Dropdown(
+                                id='map-year-dropdown-province-1',
+                                options=[{'label': str(year), 'value': year} for year in all_years],
+                                value=2023,
+                                style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
+                            ),
+                            html.Div([
+                                html.H3('Overall CMCI Score per Province', style={'text-align': 'left', 'margin-bottom': '10px'}),
+                                dcc.Loading(
+                                    id="loading-choropleth-map",
+                                    type="default",
+                                    children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
+                                ) 
+                    ], style={'text-align': 'center'}),
+                        ])
+            ], color='light', style={'margin-bottom': '20px'})
     ], width=4),
 
     # Sidebar
