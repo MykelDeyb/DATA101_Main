@@ -4,6 +4,7 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 import pandas as pd
 import geopandas as gpd
+import numpy as np
 from openpyxl import load_workbook
 from pathlib import Path
 import plotly.graph_objects as go
@@ -18,53 +19,99 @@ workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Pr
 
 
 # Map
-p_shapes = gpd.read_file(dataset_folder / 'InteractiveMap_Data/PH_Adm2_ProvDists.shp')
-p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Norte', 'adm2_en'] = 'Agusan Del Norte'
-p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Sur', 'adm2_en'] = 'Agusan Del Sur'
-p_shapes.loc[p_shapes['adm2_en'] == 'Batangas', 'adm2_en'] = 'Batangas Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Biliran', 'adm2_en'] = 'Biliran Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Cavite', 'adm2_en'] = 'Cavite Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Cebu', 'adm2_en'] = 'Cebu Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Cotabato', 'adm2_en'] = 'Cotabato (North Cotabato)'
-p_shapes.loc[p_shapes['adm2_en'] == 'Davao de Oro', 'adm2_en'] = 'Davao De Oro'
-p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Norte', 'adm2_en'] = 'Davao Del Norte'
-p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Sur', 'adm2_en'] = 'Davao Del Sur'
-p_shapes.loc[p_shapes['adm2_en'] == 'Iloilo', 'adm2_en'] = 'Iloilo Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Norte', 'adm2_en'] = 'Lanao Del Norte'
-p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Sur', 'adm2_en'] = 'Lanao Del Sur'
-p_shapes.loc[p_shapes['adm2_en'] == 'Leyte', 'adm2_en'] = 'Leyte Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Masbate', 'adm2_en'] = 'Masbate Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Romblon', 'adm2_en'] = 'Romblon Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Samar', 'adm2_en'] = 'Samar (Western Samar)'
-p_shapes.loc[p_shapes['adm2_en'] == 'Siquijor', 'adm2_en'] = 'Siquijor Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Sorsogon', 'adm2_en'] = 'Sorsogon Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Norte', 'adm2_en'] = 'Surigao Del Norte'
-p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Sur', 'adm2_en'] = 'Surigao Del Sur'
-p_shapes.loc[p_shapes['adm2_en'] == 'Tarlac', 'adm2_en'] = 'Tarlac Province'
-p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Norte', 'adm2_en'] = 'Zamboanga Del Norte'
-p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Sur', 'adm2_en'] = 'Zamboanga Del Sur'
-p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Norte', 'adm2_en'] = 'Maguindanao'
-p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Sur', 'adm2_en'] = 'Maguindanao'
+p_shapes = gpd.read_file(dataset_folder / 'InteractiveMap_Data/gadm41_PHL_shp')
+# p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Norte', 'adm2_en'] = 'Agusan Del Norte'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Agusan del Sur', 'adm2_en'] = 'Agusan Del Sur'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Batangas', 'adm2_en'] = 'Batangas Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Biliran', 'adm2_en'] = 'Biliran Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Cavite', 'adm2_en'] = 'Cavite Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Cebu', 'adm2_en'] = 'Cebu Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Cotabato', 'adm2_en'] = 'Cotabato (North Cotabato)'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Davao de Oro', 'adm2_en'] = 'Davao De Oro'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Norte', 'adm2_en'] = 'Davao Del Norte'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Davao del Sur', 'adm2_en'] = 'Davao Del Sur'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Iloilo', 'adm2_en'] = 'Iloilo Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Norte', 'adm2_en'] = 'Lanao Del Norte'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Lanao del Sur', 'adm2_en'] = 'Lanao Del Sur'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Leyte', 'adm2_en'] = 'Leyte Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Masbate', 'adm2_en'] = 'Masbate Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Romblon', 'adm2_en'] = 'Romblon Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Samar', 'adm2_en'] = 'Samar (Western Samar)'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Siquijor', 'adm2_en'] = 'Siquijor Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Sorsogon', 'adm2_en'] = 'Sorsogon Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Norte', 'adm2_en'] = 'Surigao Del Norte'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Surigao del Sur', 'adm2_en'] = 'Surigao Del Sur'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Tarlac', 'adm2_en'] = 'Tarlac Province'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Norte', 'adm2_en'] = 'Zamboanga Del Norte'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Zamboanga del Sur', 'adm2_en'] = 'Zamboanga Del Sur'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Norte', 'adm2_en'] = 'Maguindanao'
+# p_shapes.loc[p_shapes['adm2_en'] == 'Maguindanao del Sur', 'adm2_en'] = 'Maguindanao'
 p_score = pd.read_csv(dataset_folder / 'Province_Data/Overall Score.csv', encoding='latin1')
 
 
-p_shapes['adm2_en'] = p_shapes['adm2_en'].str.title()
+# p_shapes['adm2_en'] = p_shapes['adm2_en'].str.title()
 p_choro = pd.merge(p_shapes, p_score, left_on='adm2_en', right_on='PROVINCE / LGU', how='left')
 
 
 province_options = [{'label': province, 'value': province} for province in p_choro['adm2_en'] if province is not None]
 
+# Province profile 
+province_sheet = workbook['Province']
+
+region = []
+population = []
+province_revenue = []
+rank = []
+
+for row in province_sheet.iter_rows(min_row=2, values_only=True):
+   region.append(row[1])
+   population.append(row[2])
+   province_revenue.append(row[3])
+   rank.append(row[4])
+
+region_data = [row[1].value for row in province_sheet.iter_rows(min_row=2, max_col=2)]
+population_data = [row[2].value for row in province_sheet.iter_rows(min_row=2, max_col=3)]
+province_revenue_data = [row[3].value for row in province_sheet.iter_rows(min_row=2, max_col=4)]
+rank_data = [row[4].value for row in province_sheet.iter_rows(min_row=2, max_col=5)]
+
+def get_province_region(selected_province):
+   try:
+       index = province_data.index(selected_province)
+       return region_data[index]
+   except ValueError:
+       return 'No data available'
+   
+def get_province_population(selected_province):
+   try:
+       index = province_data.index(selected_province)
+       return population_data[index]
+   except ValueError:
+       return 'No data available'
+
+
+def get_province_revenue(selected_province):
+   try:
+       index = province_data.index(selected_province)
+       return province_revenue[index]
+   except ValueError:
+       return 'No data available'
+
+
+def get_province_rank(selected_province):
+   try:
+       index = province_data.index(selected_province)
+       return rank_data[index]
+   except ValueError:
+       return 'No data available'
 
 # LGU Profile
 lgu_sheet = workbook['LGU']
-
 
 lgu = []
 category = []
 percentage = []
 province = []
 revenue = []
-
 
 for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
    lgu.append(row[0])
@@ -73,13 +120,11 @@ for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
    province.append(row[3])
    revenue.append(row[4])
 
-
 lgu_data = [row[0].value for row in lgu_sheet.iter_rows(min_row=2, max_col=1)]
 category_data = [row[1].value for row in lgu_sheet.iter_rows(min_row=2, max_col=2)]
 province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_col=4)]
 revenue_data = [row[4].value for row in lgu_sheet.iter_rows(min_row=2, max_col=5)]
 lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data if lgu_name is not None]
-
 
 def get_pillar_description(selected_pillar):
    pillar_descriptions = {
@@ -91,14 +136,12 @@ def get_pillar_description(selected_pillar):
    }
    return pillar_descriptions.get(selected_pillar, 'No description available')
 
-
 def get_lgu_province(selected_lgu):
    try:
        index = lgu_data.index(selected_lgu)
        return province_data[index]
    except ValueError:
        return 'No data available'
-
 
 def get_lgu_category(selected_lgu):
    try:
@@ -107,7 +150,6 @@ def get_lgu_category(selected_lgu):
    except ValueError:
        return 'No data available'
 
-
 def get_lgu_revenue(selected_lgu):
    try:
        index = lgu_data.index(selected_lgu)
@@ -115,15 +157,12 @@ def get_lgu_revenue(selected_lgu):
    except ValueError:
        return 'No data available'
 
-
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-
 
 app.layout = dbc.Container([
   
    dbc.Row([
-
-
+       
    # First column
    dbc.Col([
        html.Div([
@@ -142,12 +181,28 @@ app.layout = dbc.Container([
                options=province_options,
                value=[]
            ),
+           dbc.Row([
+               dbc.Col([
+                   html.Label('Region'),
+                   html.Div(id='region-label')
+               ]),
+               dbc.Col([
+                   html.Label('Population'),
+                   html.Div(id='population-label')
+               ]),
+               dbc.Col([
+                   html.Label('Revenue'),
+                   html.Div(id='province-revenue-label')
+               ]),
+               dbc.Col([
+                   html.Label('Rank'),
+                   html.Div(id='rank-label')
+               ])
+           ]),
            html.H3('LGU Profile', style={'text-align': 'center'}),
 
-
            dbc.Row([
-
-
+               
            # LGU Dropdown
            html.Label('Select LGU'),
            dcc.Dropdown(
@@ -203,53 +258,6 @@ app.layout = dbc.Container([
    ])
 ])
 
-
-# Map
-@app.callback(
-   Output('choropleth-map', 'figure'),
-   Input('province-dropdown', 'value')
-)
-def update_choropleth(selected_province):
-   if not selected_province:
-       raise dash.exceptions.PreventUpdate
-
-
-   filtered_data = p_choro[p_choro['adm2_en'] == selected_province]
-
-
-   if not filtered_data.empty:
-       manila_center = {'lat': 14.5995, 'lon': 120.9842}
-
-
-       fig = px.choropleth_mapbox(
-           filtered_data,
-           geojson=filtered_data.geometry,
-           locations=filtered_data.index,
-           color='2023', 
-           hover_name='adm2_en',
-           center=manila_center,
-           zoom=4
-       )
-
-
-       fig.add_trace(go.Scattermapbox(
-           lat=[filtered_data.geometry.centroid.y.iloc[0]],
-           lon=[filtered_data.geometry.centroid.x.iloc[0]],
-           mode='markers',
-           marker=go.scattermapbox.Marker(
-               size=10,
-               color='red'
-           ),
-           hoverinfo='text',
-           hovertext=f"Selected Province: {selected_province}"
-       ))
-
-
-       return fig
-   else:
-       return px.choropleth_mapbox()
-
-
 # Descriptions
 @app.callback(
    [
@@ -273,7 +281,29 @@ def update_labels(selected_lgu, selected_pillar):
 
        return pillar_description, lgu_province, lgu_category, lgu_revenue
    else:
-       return '', '', '', ''
+       return '-', '-', '-', '-'
+   
+@app.callback(
+   [
+       Output('region-label', 'children'),
+       Output('population-label', 'children'),
+       Output('province-revenue-label', 'children'),
+       Output('rank-label', 'children'),
+   ],
+   [
+       Input('province-dropdown', 'value')
+   ]
+)
+def update_labels(selected_province):
+   if selected_province:
+       province_region = get_province_region(selected_province)
+       province_population = get_province_population(selected_province)
+       province_revenue = get_province_revenue(selected_province)
+       province_rank = get_province_rank(selected_province)
+
+       return province_region, province_population, province_revenue, province_rank
+   else:
+       return '-', '-', '-', '-'
 
 
 # Bar Chart
@@ -285,11 +315,9 @@ def update_bar_chart(selected_lgu):
    if not selected_lgu:
        return {}
 
-
    lgu_index = lgu_data.index(selected_lgu) + 2
    lgu_data_row = list(lgu_sheet.iter_rows(min_row=lgu_index, max_row=lgu_index, min_col=6, max_col=10, values_only=True))[0]
    pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
-
 
    fig = px.bar(
        x=pillars,
@@ -298,8 +326,33 @@ def update_bar_chart(selected_lgu):
        title=f'Scores per Pillar for {selected_lgu}'
    )
 
-
    return fig
+
+
+# Map
+@app.callback(
+    Output('choropleth-map', 'figure'),
+    Input('province-dropdown', 'value')
+)
+def update_choropleth(column_name):
+    column_values = p_choro['2023'].replace('-', np.nan).astype(float)
+
+    fig = px.choropleth_mapbox(
+        p_choro,
+        geojson=p_choro.geometry,
+        locations=p_choro.index,
+        color=column_values,
+        color_continuous_scale='RdYlGn',
+        range_color=(np.nanmin(column_values), np.nanmax(column_values)),
+        zoom=4,
+        height=800,
+        center={"lat": p_choro.geometry.centroid.y.mean(), "lon": p_choro.geometry.centroid.x.mean()},
+        opacity=0.5,
+        labels={'2023': f'Province Overall Score (2023)'},
+        title='Province Overall Score (2023)',
+        hover_data={'adm2_en': True},
+    )
+    return fig
 
 
 if __name__ == '__main__':
