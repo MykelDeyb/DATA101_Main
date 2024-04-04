@@ -64,7 +64,11 @@ for sheet in workbook_PROV:
     }
 
 pillar_names = list(pillar_data_LGU.keys())
-pillar_names = sorted(pillar_names)
+pillar_names = ['Overall Score','Economic Dynamism',
+                'Government Efficiency',
+                'Infrastructure',
+                'Innovation',
+                'Resiliency']
 
 all_years = list(range(2014, 2024))
 
@@ -173,8 +177,11 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+<<<<<<< HEAD
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
+=======
+>>>>>>> 49360c422bf5724baecba921678f0c31fe75205c
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -710,6 +717,13 @@ def update_row_visibility(level):
     row4_style = {'display': 'none'} if level != 'Province' else {}
     return row2_style, row3_style, row4_style
 
+@app.callback(
+    Output('pillar-dropdown', 'value'),
+    [Input('level-dropdown', 'value')]
+)
+def set_pillar_dropdown(level):
+    if level == 'Province' or level == 'LGU':
+        return 'Overall Score'
 
 @app.callback(
     Output('province-checkboxes', 'options'),
