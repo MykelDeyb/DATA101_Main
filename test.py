@@ -177,11 +177,8 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-<<<<<<< HEAD
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
-=======
->>>>>>> 5329b61161b5016213188203c93ec0bbb8a9b0b0
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -547,33 +544,6 @@ page2_layout = dbc.Container([
             dcc.Loading(
                 id="loading-choropleth-map",
                 type="default",
-<<<<<<< HEAD
-                children=dcc.Graph(id='choropleth-map', style={'height':'1000px','width': '700px'})
-            ) 
-        ])
-    ], style={'text-align': 'center'}),
-], width=4, style={'padding-left': '20px'}),
-    
-        dbc.Col([
-            # Sidebar
-            dbc.Card([
-                dbc.CardBody([
-                    html.Div([
-                        html.Label('Select Provinces',style={'display': 'block', 'text-align': 'center', 'margin-bottom': '5px','font-weight':'bold','font-size':'20px'}),
-                        dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
-                        dcc.Checklist(
-                            id='province-checkboxes',
-                            options=[{'label': province, 'value': province} for province in provinces],
-                            value=[],
-                            style={'overflowY': 'scroll', 'height': '400px'}
-                        ),
-                        html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
-                    ],style={'margin-left': '20px'}),
-                ]),
-            ], color='light', style={'margin-bottom': '20px'}),
-        ], width=3),
-    ], id='row4', style={'display': 'none'})
-=======
                 children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
             ) 
         ], style={'text-align': 'center'}),
@@ -601,7 +571,6 @@ page2_layout = dbc.Container([
 
 
 
->>>>>>> 5329b61161b5016213188203c93ec0bbb8a9b0b0
 ], fluid=True)
 
 page3_layout = dbc.Container([
@@ -1085,13 +1054,8 @@ def update_choropleth(map_year):
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
-<<<<<<< HEAD
-        width=None,   # Set the width of the entire figure
-        height=1000, 
-=======
         width=None,  
         height=600, 
->>>>>>> 5329b61161b5016213188203c93ec0bbb8a9b0b0
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
