@@ -17,24 +17,25 @@ all_years = list(range(2014, 2024))
 
 # Map
 file_paths = [
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-bicolregionregionv.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-cagayanvalleyregionii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-calabarzonregioniva.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-caragaregionxiii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-centralluzonregioniii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-centralvisayasregionvii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-davaoregionregionxi.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-easternvisayasregionviii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-ilocosregionregioni.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-metropolitanmanila.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-mimaroparegionivb.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-northernmindanaoregionx.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-soccsksargenregionxii.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-westernvisayasregionvi.json",
-    "C:/Users/acer/Documents/Data Sci/DataSets/Province JSON/provinces-region-zamboangapeninsularegionix.json"
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-bicolregionregionv.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cagayanvalleyregionii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-calabarzonregioniva.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-caragaregionxiii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralluzonregioniii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralvisayasregionvii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-davaoregionregionxi.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-easternvisayasregionviii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-ilocosregionregioni.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-metropolitanmanila.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-mimaroparegionivb.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-northernmindanaoregionx.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-soccsksargenregionxii.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-westernvisayasregionvi.json",
+    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-zamboangapeninsularegionix.json"
 ]
+
 
 # Read each file and append to a list
 ph_list = [gpd.read_file(file) for file in file_paths]
