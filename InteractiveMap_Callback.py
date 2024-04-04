@@ -98,11 +98,11 @@ lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data i
 
 def get_pillar_description(selected_pillar):
    pillar_descriptions = {
-       'Resiliency': 'Applies to the capacity of a locality to build systems that can absorb change and disturbance and being able to adapt to such changes. It spans frameworks that bind LGUs and their constituents to prepare for possible shocks and stresses; budgeting for disaster risk reduction; hazard/risk identification mechanisms; resilience-related infrastructure; and resilience-related mechanisms.',
-       'Government Efficiency': 'Refers to the quality and reliability of government services and government support for effective and sustainable productive expansion. This factor looks at government as an institution that is generally not corrupt; able to protect and enforce contracts; apply moderate and reasonable taxation and is able to regulate proactively.',
-       'Innovation': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity. It hinges mainly on the development of creative capital which are human resources, research capabilities, and networking capacities..',
-       'Economic Dynamism': 'Refers to stable expansion of businesses and industries and higher employment. Matches output and productivity of the local economy with the local resources. Localities are centers of economic activities, and due to this, business expansion and job creation are easily observable in local settings.',
-       'Infrastructure': 'Pertains to the physical assets that connect, expand, and sustain a locality and its surroundings to enable provision of goods and services. It involves basic inputs of production such as energy, water; interconnection of production such as transportation, roads and communications; sustenance of production such as waste, disaster preparedness, environmental sustainability; and human capital formation infrastructure.'
+       'Resiliency': 'Applies to the capacity of a locality to build systems that can absorb change and disturbance and being able to adapt to such changes',
+       'Government Efficiency': 'Refers to the quality and reliability of government services and government support for effective and sustainable productive expansion',
+       'Innovation': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity',
+       'Economic Dynamism': 'Refers to stable expansion of businesses and industries and higher employment',
+       'Infrastructure': 'Pertains to the physical assets that connect, expand, and sustain a locality and its surroundings to enable provision of goods and services'
    }
    return pillar_descriptions.get(selected_pillar, 'No description available')
 
@@ -295,7 +295,7 @@ def update_choropleth(map_year):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         width=None,   # Set the width of the entire figure
-        height=None, 
+        height=600, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
