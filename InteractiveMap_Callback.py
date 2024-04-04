@@ -402,7 +402,7 @@ def update_choropleth(map_year, province):
         hover_name='PROVINCE',
         hover_data={str(map_year): True},  # Show CMCI score when hovering
         labels={str(map_year): 'Overall CMCI Score'},
-        height=1200
+        height=900
     )
 
     initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
@@ -411,7 +411,7 @@ def update_choropleth(map_year, province):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         # width=None,   # Set the width of the entire figure
-        height=1200, 
+        height=900, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
