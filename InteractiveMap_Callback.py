@@ -149,16 +149,6 @@ lgu_province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_
 revenue_data = [row[4].value for row in lgu_sheet.iter_rows(min_row=2, max_col=5)]
 lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data if lgu_name is not None]
 
-def get_pillar_description(selected_pillar):
-   pillar_descriptions = {
-       'Resiliency': 'Applies to the capacity of a locality to build systems that can absorb change and disturbance and being able to adapt to such changes',
-       'Government Efficiency': 'Refers to the quality and reliability of government services and government support for effective and sustainable productive expansion',
-       'Innovation': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity',
-       'Economic Dynamism': 'Refers to stable expansion of businesses and industries and higher employment',
-       'Infrastructure': 'Pertains to the physical assets that connect, expand, and sustain a locality and its surroundings to enable provision of goods and services'
-   }
-   return pillar_descriptions.get(selected_pillar, 'No description available')
-
 def get_lgu_province(selected_lgu):
    try:
        index = lgu_data.index(selected_lgu)
@@ -179,6 +169,7 @@ def get_lgu_revenue(selected_lgu):
        return revenue_data[index]
    except ValueError:
        return 'No data available'
+
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -246,26 +237,6 @@ app.layout = dbc.Container([
            ),
            dbc.Row([
                dbc.Col([
-                   html.Label('Select Pillar'),
-                   dcc.Dropdown(
-                       id='pillar-dropdown-map',
-                       options=[
-                           {'label': 'Resiliency', 'value': 'Resiliency'},
-                           {'label': 'Government Efficiency', 'value': 'Government Efficiency'},
-                           {'label': 'Innovation', 'value': 'Innovation'},
-                           {'label': 'Economic Dynamism', 'value': 'Economic Dynamism'},
-                           {'label': 'Infrastructure', 'value': 'Infrastructure'},
-                       ],
-                       value=[]
-                   ),
-               ]),
-               dbc.Col([
-                   html.Label('Pillar Description'),
-                   html.Div(id='pillar-description')
-               ])
-           ]),
-           dbc.Row([
-               dbc.Col([
                    html.Label('Province'),
                    html.Div(id='province-label')
                ]),
@@ -277,17 +248,35 @@ app.layout = dbc.Container([
                    html.Label('Revenue'),
                    html.Div(id='revenue-label')
                ])
-           ])
-       ])
+           ]),
+            dbc.Row([
+                html.Div([
+                    html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
+                    dcc.Graph(id='bar-chart-map')
+                ])
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    html.Label('Select Pillar'),
+                    dcc.Dropdown(
+                        id='pillar-dropdown-map',
+                        options=[
+                            {'label': 'Resiliency', 'value': 'Resiliency'},
+                            {'label': 'Government Efficiency', 'value': 'Government Efficiency'},
+                            {'label': 'Innovation', 'value': 'Innovation'},
+                            {'label': 'Economic Dynamism', 'value': 'Economic Dynamism'},
+                            {'label': 'Infrastructure', 'value': 'Infrastructure'},
+                        ],
+                        value=[]
+                    ),
+                ]),
+                dbc.Col([
+                    html.Label('Pillar Description'),
+                    html.Div(id='pillar-description')
+                ])
+            ]),
+        ])
    ]),
-  
-   # Third column
-   dbc.Row([
-       html.Div([
-           html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
-           dcc.Graph(id='bar-chart-map')
-       ])
-   ])
    ])
    ])
 ])
@@ -317,28 +306,43 @@ def update_labels(province):
    
 @app.callback(
    [
-       Output('pillar-description', 'children'),
        Output('province-label', 'children'),
        Output('category-label', 'children'),
        Output('revenue-label', 'children'),
    ],
    [
        Input('lgu-dropdown', 'value'),
-       Input('pillar-dropdown-map', 'value')
    ]
 )
-def update_labels(selected_lgu, selected_pillar):
-   if selected_lgu and selected_pillar:
-       pillar_description = get_pillar_description(selected_pillar)
+def update_labels(selected_lgu):
+   if selected_lgu:
        lgu_province = get_lgu_province(selected_lgu)
        lgu_category = get_lgu_category(selected_lgu)
        lgu_revenue = get_lgu_revenue(selected_lgu)
 
-
-       return pillar_description, lgu_province, lgu_category, lgu_revenue
+       return lgu_province, lgu_category, lgu_revenue
    else:
-       return '-', '-', '-', '-'
+       return '-', '-', '-'
 
+def get_pillar_description(selected_pillar):
+   pillar_descriptions = {
+       'Resiliency': 'Applies to the capacity of a locality to build systems that can absorb change and disturbance and being able to adapt to such changes',
+       'Government Efficiency': 'Refers to the quality and reliability of government services and government support for effective and sustainable productive expansion',
+       'Innovation': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity',
+       'Economic Dynamism': 'Refers to stable expansion of businesses and industries and higher employment',
+       'Infrastructure': 'Pertains to the physical assets that connect, expand, and sustain a locality and its surroundings to enable provision of goods and services'
+   }
+   return pillar_descriptions.get(selected_pillar, 'No description available')
+
+@app.callback(
+    Output('pillar-description', 'children'),
+    [Input('pillar-dropdown-map', 'value')]
+)
+def update_pillar_description(selected_pillar):
+    if not selected_pillar:
+        return "-" 
+    else:
+        return get_pillar_description(selected_pillar)
 
 # Bar Chart
 @app.callback(
@@ -389,7 +393,7 @@ def update_choropleth(map_year, province):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         width=None,   # Set the width of the entire figure
-        height=650, 
+        height=900, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
