@@ -177,11 +177,8 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-<<<<<<< HEAD
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
-=======
->>>>>>> 49360c422bf5724baecba921678f0c31fe75205c
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -540,7 +537,7 @@ page2_layout = dbc.Container([
                             dcc.Graph(id='line-chart-prov'),
                         ]),
                     ])
-                ],color='light', style={'margin-bottom': '20px'})
+                ],color='light', style={'margin-bottom': '20px','margin-right':'20px'})
             ]),
             dbc.Row([
                 dbc.Card([
@@ -550,7 +547,7 @@ page2_layout = dbc.Container([
                             dcc.Graph(id='bar-chart-prov')
                         ]),
                     ])
-                ],color='light', style={'margin-bottom': '20px'})
+                ],color='light', style={'margin-bottom': '20px', 'margin-right':'20px'})
             ])
         ], width=4),
 
@@ -569,11 +566,11 @@ page2_layout = dbc.Container([
             dcc.Loading(
                 id="loading-choropleth-map",
                 type="default",
-                children=dcc.Graph(id='choropleth-map', style={'height':'1000px','width': '400px'})
+                children=dcc.Graph(id='choropleth-map', style={'height':'1000px','width': '700px'})
             ) 
         ])
     ], style={'text-align': 'center'}),
-], width=4),
+], width=4, style={'padding-left': '20px'}),
     
         dbc.Col([
             # Sidebar
@@ -589,7 +586,7 @@ page2_layout = dbc.Container([
                             style={'overflowY': 'scroll', 'height': '400px'}
                         ),
                         html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
-                    ]),
+                    ],style={'margin-left': '20px'}),
                 ]),
             ], color='light', style={'margin-bottom': '20px'}),
         ], width=3),
@@ -1034,7 +1031,7 @@ def update_choropleth(map_year):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         width=None,   # Set the width of the entire figure
-        height=600, 
+        height=1000, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
@@ -1069,4 +1066,4 @@ app.layout = html.Div([
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
