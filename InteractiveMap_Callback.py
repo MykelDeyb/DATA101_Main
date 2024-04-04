@@ -17,23 +17,23 @@ all_years = list(range(2014, 2024))
 
 # Map
 file_paths = [
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-bicolregionregionv.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cagayanvalleyregionii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-calabarzonregioniva.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-caragaregionxiii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralluzonregioniii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-centralvisayasregionvii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-davaoregionregionxi.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-easternvisayasregionviii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-ilocosregionregioni.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-metropolitanmanila.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-mimaroparegionivb.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-northernmindanaoregionx.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-soccsksargenregionxii.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-westernvisayasregionvi.json",
-    dataset_folder / "InteractiveMap_Data/Province JSON/provinces-region-zamboangapeninsularegionix.json"
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-bicolregionregionv.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-autonomousregionofmuslimmindanaoarmm.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-cagayanvalleyregionii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-calabarzonregioniva.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-caragaregionxiii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-centralluzonregioniii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-centralvisayasregionvii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-cordilleraadministrativeregioncar.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-davaoregionregionxi.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-easternvisayasregionviii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-ilocosregionregioni.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-metropolitanmanila.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-mimaroparegionivb.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-northernmindanaoregionx.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-soccsksargenregionxii.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-westernvisayasregionvi.json",
+    "/Users/kylacansana/Downloads/Province JSON/provinces-region-zamboangapeninsularegionix.json"
 ]
 
 # Read each file and append to a list
@@ -73,55 +73,6 @@ ph.loc[ph['PROVINCE'] == 'Metropolitan Manila', 'PROVINCE'] = 'Metro Manila'
 p_choro = pd.merge(ph, p_score,  left_on='PROVINCE', right_on='PROVINCE / LGU', how='left', indicator=True)
 
 province_options = [{'label': province, 'value': province} for province in p_choro['PROVINCE'] if province is not None]
-
-# Province profile 
-province_sheet = workbook['Province']
-
-region = []
-population = []
-province_revenue = []
-rank = []
-
-for row in province_sheet.iter_rows(min_row=2, values_only=True):
-   region.append(row[1])
-   population.append(row[2])
-   province_revenue.append(row[3])
-   rank.append(row[4])
-
-region_data = [row[1].value for row in province_sheet.iter_rows(min_row=2, max_col=2)]
-population_data = [row[2].value for row in province_sheet.iter_rows(min_row=2, max_col=3)]
-province_revenue_data = [row[3].value for row in province_sheet.iter_rows(min_row=2, max_col=4)]
-rank_data = [row[4].value for row in province_sheet.iter_rows(min_row=2, max_col=5)]
-
-def get_province_region(selected_province):
-   try:
-       index = province_data.index(selected_province)
-       return region_data[index]
-   except ValueError:
-       return 'No data available'
-   
-def get_province_population(selected_province):
-   try:
-       index = province_data.index(selected_province)
-       return population_data[index]
-   except ValueError:
-       return 'No data available'
-
-
-def get_province_revenue(selected_province):
-   try:
-       index = province_data.index(selected_province)
-       return province_revenue[index]
-   except ValueError:
-       return 'No data available'
-
-
-def get_province_rank(selected_province):
-   try:
-       index = province_data.index(selected_province)
-       return rank_data[index]
-   except ValueError:
-       return 'No data available'
 
 # LGU Profile
 lgu_sheet = workbook['LGU']
@@ -211,24 +162,6 @@ app.layout = dbc.Container([
                options=province_options,
                value=[]
            ),
-           dbc.Row([
-               dbc.Col([
-                   html.Label('Region'),
-                   html.Div(id='region-label')
-               ]),
-               dbc.Col([
-                   html.Label('Population'),
-                   html.Div(id='population-label')
-               ]),
-               dbc.Col([
-                   html.Label('Revenue'),
-                   html.Div(id='province-revenue-label')
-               ]),
-               dbc.Col([
-                   html.Label('Rank'),
-                   html.Div(id='rank-label')
-               ])
-           ]),
            html.H3('LGU Profile', style={'text-align': 'center'}),
 
            dbc.Row([
@@ -276,14 +209,14 @@ app.layout = dbc.Container([
            ])
        ])
    ]),
-   ]),
   
    # Third column
-   dbc.Col([
+   dbc.Row([
        html.Div([
            html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
            dcc.Graph(id='bar-chart')
        ])
+   ])
    ])
    ])
 ])
@@ -310,28 +243,6 @@ def update_labels(selected_lgu, selected_pillar):
 
 
        return pillar_description, lgu_province, lgu_category, lgu_revenue
-   else:
-       return '-', '-', '-', '-'
-   
-@app.callback(
-   [
-       Output('region-label', 'children'),
-       Output('population-label', 'children'),
-       Output('province-revenue-label', 'children'),
-       Output('rank-label', 'children'),
-   ],
-   [
-       Input('province-dropdown', 'value')
-   ]
-)
-def update_labels(selected_province):
-   if selected_province:
-       province_region = get_province_region(selected_province)
-       province_population = get_province_population(selected_province)
-       province_revenue = get_province_revenue(selected_province)
-       province_rank = get_province_rank(selected_province)
-
-       return province_region, province_population, province_revenue, province_rank
    else:
        return '-', '-', '-', '-'
 
@@ -364,30 +275,39 @@ def update_bar_chart(selected_lgu):
     Input('map-year-dropdown-province', 'value')
 )
 def update_choropleth(map_year):
-    initial_column_values = p_choro.set_index('PROVINCE')[map_year].replace('-', np.nan).astype(float)
+    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float)
     initial_column_values = initial_column_values.fillna(0).astype(int)
 
-    initial_fig = px.choropleth(
+    initial_fig = px.choropleth(    
         p_choro,
         geojson=p_choro.geometry,
         locations=p_choro.index,
         color=initial_column_values,
         color_continuous_scale='Viridis',
-        labels={'2023': 'Annual Inflation Rate'},
+        hover_name='PROVINCE',
+        hover_data={str(map_year): True},  # Show CMCI score when hovering
+        labels={str(map_year): 'Overall CMCI Score'},
     )
 
     initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
     initial_fig.update_layout(
-        coloraxis_colorbar=dict(title='Overall CMCI Score'),
+        coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
+        margin=dict(l=0, r=0, t=0, b=0),
+        width=None,   # Set the width of the entire figure
+        height=None, 
         geo=dict(
             visible=False,
-            bgcolor='rgba(255,255,255,0)'
-        ),
+            bgcolor='rgba(255,255,255,0)',
+            center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
+            projection_scale=40,  # Increase this value further to zoom out the map
+            projection_type='mercator',  # Adjust the projection type to control the aspect ratio
+    )
+    )
+    initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
     )
 
     return initial_fig
-
 
 if __name__ == '__main__':
    app.run_server(debug=True)
