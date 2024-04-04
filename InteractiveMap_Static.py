@@ -75,25 +75,22 @@ p_choro = pd.merge(ph, p_score,  left_on='PROVINCE', right_on='PROVINCE / LGU', 
 
 initial_column_values = p_choro.set_index('PROVINCE')['2023'].replace('-', np.nan).astype(float)
 initial_column_values = initial_column_values.fillna(0).astype(int)
-
 initial_fig = px.choropleth(
     p_choro,
     geojson=p_choro.geometry,
     locations=p_choro.index,
     color=initial_column_values,
     color_continuous_scale='Viridis',
-    labels={'2023': 'Annual Inflation Rate'},
+    hover_name='PROVINCE',
+    hover_data={'2023': True},  # Show CMCI score when hovering
+    labels={'2023': 'Overall CMCI Score'},
 )
-
 initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
 initial_fig.update_layout(
     coloraxis_colorbar=dict(title='Overall CMCI Score'),
     paper_bgcolor="#C9D1D2",
-    geo=dict(
-        visible=False,
-        bgcolor='rgba(255,255,255,0)'
-    ),
 )
+initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}')
 
 province_options = [{'label': province, 'value': province} for province in p_choro['PROVINCE'] if province is not None]
 
