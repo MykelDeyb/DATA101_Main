@@ -173,9 +173,8 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-<<<<<<< HEAD
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-=======
+
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -363,7 +362,6 @@ def get_lgu_revenue(selected_lgu):
        return 'No data available'
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
->>>>>>> 5bd26f7d84fcef1cd0767e25426e9e284531adf2
 
 
 page1_layout = html.Div(
@@ -547,11 +545,28 @@ page2_layout = dbc.Container([
                     ])
                 ],color='light', style={'margin-bottom': '20px'})
             ])
-        ], width=6, style={'margin-right':'100px'}),
+        ], width=4),
 
         dbc.Col([
-
-        ], width=2),
+            dbc.Row([
+                dcc.Dropdown(
+                    id='map-year-dropdown-province',
+                    options=[{'label': str(year), 'value': year} for year in all_years],
+                    value=2023,
+                    style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
+                            ),
+       ]),
+       dbc.Row([
+            html.Div([
+            html.H3('Choropleth Map', style={'text-align': '-webkit-left', 'margin-bottom': '10px'}),
+            dcc.Loading(
+                id="loading-choropleth-map",
+                type="default",
+                children=dcc.Graph(id='choropleth-map', style={'height':'1000px','width': '400px'})
+            ) 
+        ])
+    ], style={'text-align': 'center'}),
+], width=4),
     
         dbc.Col([
             # Sidebar
