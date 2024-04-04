@@ -295,7 +295,7 @@ def update_choropleth(map_year):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         width=None,   # Set the width of the entire figure
-        height=700, 
+        height=None, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
