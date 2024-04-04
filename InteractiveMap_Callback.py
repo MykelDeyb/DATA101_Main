@@ -178,7 +178,7 @@ app.layout = dbc.Container([
                dbc.Col([
                    html.Label('Select Pillar'),
                    dcc.Dropdown(
-                       id='pillar-dropdown',
+                       id='pillar-dropdown-map',
                        options=[
                            {'label': 'Resiliency', 'value': 'Resiliency'},
                            {'label': 'Government Efficiency', 'value': 'Government Efficiency'},
@@ -215,7 +215,7 @@ app.layout = dbc.Container([
    dbc.Row([
        html.Div([
            html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
-           dcc.Graph(id='bar-chart')
+           dcc.Graph(id='bar-chart-map')
        ])
    ])
    ])
