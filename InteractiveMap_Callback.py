@@ -386,7 +386,7 @@ def update_bar_chart(selected_lgu):
 # Map
 @app.callback(
     Output('choropleth-map', 'figure'),
-    Input('map-year-dropdown-province', 'value'),
+    Input('map-year-dropdown-province-2', 'value'),
     Input('province-dropdown', 'value')
 )
 def update_choropleth(map_year, province):
