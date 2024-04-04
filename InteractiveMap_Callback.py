@@ -232,7 +232,7 @@ app.layout = dbc.Container([
    ],
    [
        Input('lgu-dropdown', 'value'),
-       Input('pillar-dropdown', 'value')
+       Input('pillar-dropdown-map', 'value')
    ]
 )
 def update_labels(selected_lgu, selected_pillar):
@@ -250,7 +250,7 @@ def update_labels(selected_lgu, selected_pillar):
 
 # Bar Chart
 @app.callback(
-   Output('bar-chart', 'figure'),
+   Output('bar-chart-map', 'figure'),
    Input('lgu-dropdown', 'value')
 )
 def update_bar_chart(selected_lgu):
