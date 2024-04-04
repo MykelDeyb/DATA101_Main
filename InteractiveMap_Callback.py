@@ -75,25 +75,77 @@ p_choro = pd.merge(ph, p_score,  left_on='PROVINCE', right_on='PROVINCE / LGU', 
 
 province_options = [{'label': province, 'value': province} for province in p_choro['PROVINCE'] if province is not None]
 
+# Province Profile 
+
+province_sheet = workbook['Province']
+
+province = []
+region = []
+population = []
+province_revenue = []
+rank = []
+
+for row in province_sheet.iter_rows(min_row=2, values_only=True):
+   region.append(row[1])
+   population.append(row[2])
+   province_revenue.append(row[3])
+   rank.append(row[4])
+
+province_data = [row[0].value for row in province_sheet.iter_rows(min_row=2)]
+region_data = [row[1].value for row in province_sheet.iter_rows(min_row=2)]
+population_data = [row[2].value for row in province_sheet.iter_rows(min_row=2)]
+province_revenue_data = [row[3].value for row in province_sheet.iter_rows(min_row=2)]
+rank_data = [row[4].value for row in province_sheet.iter_rows(min_row=2)]
+
+def get_province_region(province):
+   try:
+       index = province_data.index(province)
+       return region_data[index]
+   except ValueError:
+       return 'No data available'
+   
+def get_province_population(province):
+   try:
+       index = province_data.index(province)
+       return population_data[index]
+   except ValueError:
+       return 'No data available'
+
+
+def get_province_revenue(province):
+   try:
+       index = province_data.index(province)
+       return province_revenue[index]
+   except ValueError:
+       return 'No data available'
+
+
+def get_province_rank(province):
+   try:
+       index = province_data.index(province)
+       return rank_data[index]
+   except ValueError:
+       return 'No data available'
+   
 # LGU Profile
 lgu_sheet = workbook['LGU']
 
 lgu = []
 category = []
 percentage = []
-province = []
+lgu_province = []
 revenue = []
 
 for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
    lgu.append(row[0])
    category.append(row[1])
    percentage.append(row[2])
-   province.append(row[3])
+   lgu_province.append(row[3])
    revenue.append(row[4])
 
 lgu_data = [row[0].value for row in lgu_sheet.iter_rows(min_row=2, max_col=1)]
 category_data = [row[1].value for row in lgu_sheet.iter_rows(min_row=2, max_col=2)]
-province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_col=4)]
+lgu_province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_col=4)]
 revenue_data = [row[4].value for row in lgu_sheet.iter_rows(min_row=2, max_col=5)]
 lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data if lgu_name is not None]
 
@@ -110,7 +162,7 @@ def get_pillar_description(selected_pillar):
 def get_lgu_province(selected_lgu):
    try:
        index = lgu_data.index(selected_lgu)
-       return province_data[index]
+       return lgu_province_data[index]
    except ValueError:
        return 'No data available'
 
@@ -163,6 +215,24 @@ app.layout = dbc.Container([
                options=sorted(province_options, key=lambda d: d['label']),
                value=[]
            ),
+           dbc.Row([
+               dbc.Col([
+                   html.Label('Region'),
+                   html.Div(id='region-label')
+               ]),
+               dbc.Col([
+                   html.Label('Population'),
+                   html.Div(id='population-label')
+               ]),
+               dbc.Col([
+                   html.Label('Revenue'),
+                   html.Div(id='province-revenue-label')
+               ]),
+               dbc.Col([
+                   html.Label('Rank'),
+                   html.Div(id='rank-label')
+               ])
+           ]),
            html.H3('LGU Profile', style={'text-align': 'center'}),
 
            dbc.Row([
@@ -223,6 +293,28 @@ app.layout = dbc.Container([
 ])
 
 # Descriptions
+@app.callback(
+   [
+       Output('region-label', 'children'),
+       Output('population-label', 'children'),
+       Output('province-revenue-label', 'children'),
+       Output('rank-label', 'children'),
+   ],
+   [
+       Input('province-dropdown', 'value')
+   ]
+)
+def update_labels(province):
+   if province:
+       province_region = get_province_region(province)
+       province_population = get_province_population(province)
+       province_revenue = get_province_revenue(province)
+       province_rank = get_province_rank(province)
+
+       return province_region, province_population, province_revenue, province_rank
+   else:
+       return '-', '-', '-', '-'
+   
 @app.callback(
    [
        Output('pillar-description', 'children'),

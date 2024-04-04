@@ -84,4 +84,40 @@ colors = numeric_values.values
 
 # print(colors)
 
-print(ph.loc[ph['PROVINCE'] == 'Cebu Province', 'geometry'].get_coordinates().iloc[0]['x'])
+# print(ph.loc[ph['PROVINCE'] == 'Cebu Province', 'geometry'].get_coordinates().iloc[0]['x'])
+
+province_sheet = workbook['Province']
+
+region = []
+population = []
+province_revenue = []
+rank = []
+
+for row in province_sheet.iter_rows(min_row=2, values_only=True):
+   region.append(row[1])
+   population.append(row[2])
+   province_revenue.append(row[3])
+   rank.append(row[4])
+
+region_data = [row[1].value for row in province_sheet.iter_rows(min_row=2)]
+
+print(region_data)
+
+# lgu_sheet = workbook['LGU']
+
+# lgu = []
+# category = []
+# percentage = []
+# province = []
+# revenue = []
+
+# for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
+#    lgu.append(row[0])
+#    category.append(row[1])
+#    percentage.append(row[2])
+#    province.append(row[3])
+#    revenue.append(row[4])
+
+# lgu_data = [row[0].value for row in lgu_sheet.iter_rows(min_row=2, max_col=1)]
+
+# print(lgu_data)
