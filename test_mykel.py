@@ -525,9 +525,9 @@ page2_layout = dbc.Container([
 
     # Row 4 (Displayed conditionally)
     dbc.Row([        
-    # Column 1
-    dbc.Col([ 
-            #Row 1: Line chart
+        #Column 1 - Line chart 
+        dbc.Col([ 
+            #Row 1
             dbc.Row([
                 dbc.Card([
                     dbc.CardBody([
@@ -538,7 +538,7 @@ page2_layout = dbc.Container([
                     ])
                 ],color='light', style={'margin-bottom': '20px'})
             ]),
-            #Row 2: Bar Chart
+            #Row 2
             dbc.Row([
                 dbc.Card([
                     dbc.CardBody([
@@ -549,48 +549,52 @@ page2_layout = dbc.Container([
                     ])
                 ],color='light', style={'margin-bottom': '20px'})
             ])
-        ], width=4, style={'padding-left': '20px'}),
-
-    # Map
-    dbc.Col([
-        dcc.Dropdown(
-            id='map-year-dropdown-province-1',
-            options=[{'label': str(year), 'value': year} for year in all_years],
-            value=2023,
-            style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
-        ),
-        html.Div([
-            html.H3('Choropleth Map', style={'text-align': 'left', 'margin-bottom': '10px'}),
-            dcc.Loading(
-                id="loading-choropleth-map",
-                type="default",
-                children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
-            ) 
-        ], style={'text-align': 'center'}),
-    ], width=4),
-
-    # Sidebar
-    dbc.Col([
-        dbc.Card([
-            dbc.CardBody([
-                html.Div([
-                    html.Label('Select Provinces', style={'display': 'block', 'text-align': 'center', 'margin-bottom': '5px','font-weight':'bold','font-size':'20px'}),
-                    dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
-                    dcc.Checklist(
-                        id='province-checkboxes',
-                        options=[{'label': province, 'value': province} for province in provinces],
-                        value=[],
-                        style={'overflowY': 'scroll', 'height': '400px'}
-                    ),
-                    html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
-                ], style={'margin-left': '20px'}),
+        ], id='row4-col1', width=4),
+        
+        #Column 2 - Line chart 
+        dbc.Col([
+            #Row 1
+            dbc.Row([
+                dcc.Dropdown(
+                    id='map-year-dropdown-province-1',
+                    options=[{'label': str(year), 'value': year} for year in all_years],
+                    value=2023,
+                    style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
+                            ),
             ]),
-        ], color='light', style={'margin-bottom': '20px'})
-    ], width=4),
-], id='row4', style={'display': 'none'})
 
-
-
+            #Row 2
+            dbc.Row([
+                    html.Div([
+                        html.H3('Choropleth Map', style={'text-align': '-webkit-left', 'margin-bottom': '10px'}),
+                            dcc.Loading(
+                                id="loading-choropleth-map",
+                                type="default",
+                                children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '550px'})
+                            ) 
+                    ])
+            ], color='light', style={'text-align': 'center','margin-bottom': '20px'}),
+        ], id='row4-col2', width=4),
+    
+        #Column 3 - Sidebar
+        dbc.Col([
+            dbc.Card([
+                dbc.CardBody([
+                    html.Div([
+                        html.Label('Select Provinces',style={'display': 'block', 'text-align': 'center', 'margin-bottom': '5px','font-weight':'bold','font-size':'20px'}),
+                        dcc.Input(id='province-search', type='text', placeholder='Search Provinces...'),
+                        dcc.Checklist(
+                            id='province-checkboxes',
+                            options=[{'label': province, 'value': province} for province in provinces],
+                            value=[],
+                            style={'overflowY': 'scroll', 'height': '400px'}
+                        ),
+                        html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
+                    ], style={'margin-left': '20px'})
+                ])
+            ], color='light', style={'margin-bottom': '20px','margin-right':'10px'})
+        ], id='row4-col3', width=3)
+    ], id='row4', style={'display': 'none'})
 ], fluid=True)
 
 page3_layout = dbc.Container([
@@ -1036,7 +1040,7 @@ def update_choropleth(map_year):
         margin=dict(l=0, r=0, t=0, b=0),
         #padding=dict(l=0, r=0, t=0, b=0),  # Reduce padding to increase map display size
         width=None,
-        height=1000, 
+        height=600, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
