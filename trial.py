@@ -82,4 +82,6 @@ initial_column_values = initial_column_values.replace('-', np.nan).astype(float)
 numeric_values = initial_column_values.dropna()
 colors = numeric_values.values
 
-print(colors)
+# print(colors)
+
+print(ph.loc[ph['PROVINCE'] == 'Cebu Province', 'geometry'].get_coordinates().iloc[0]['x'])

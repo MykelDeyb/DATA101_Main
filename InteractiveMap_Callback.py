@@ -159,7 +159,7 @@ app.layout = dbc.Container([
            html.Label('Select Province'),
            dcc.Dropdown(
                id='province-dropdown',
-               options=province_options,
+               options=sorted(province_options, key=lambda d: d['label']),
                value=[]
            ),
            html.H3('LGU Profile', style={'text-align': 'center'}),
@@ -272,9 +272,10 @@ def update_bar_chart(selected_lgu):
 # Map
 @app.callback(
     Output('choropleth-map', 'figure'),
-    Input('map-year-dropdown-province', 'value')
+    Input('map-year-dropdown-province', 'value'),
+    Input('province-dropdown', 'value')
 )
-def update_choropleth(map_year):
+def update_choropleth(map_year, province):
     initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float)
     initial_column_values = initial_column_values.fillna(0).astype(int)
 
@@ -295,7 +296,7 @@ def update_choropleth(map_year):
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         width=None,   # Set the width of the entire figure
-        height=600, 
+        height=650, 
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
@@ -303,9 +304,37 @@ def update_choropleth(map_year):
             projection_scale=40,  # Increase this value further to zoom out the map
             projection_type='mercator',  # Adjust the projection type to control the aspect ratio
     )
+
     )
     initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
+    
     )
+
+    lon_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['x']
+    lat_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['y']
+
+    if not province:
+        initial_fig.add_scattergeo(
+                lat=[lat_manila],
+                lon=[lon_manila],
+                mode='markers',
+                text="Distance from Manila & Selected Province",
+                marker_size=10,
+                marker_color='rgb(235, 0, 100)'
+            )
+    else: 
+        lon_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['x']
+        lat_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['y']
+
+        initial_fig.add_scattergeo(
+                lat=[lat_manila, lat_selected],
+                lon=[lon_manila, lon_selected],
+                mode='markers',
+                text="Distance from Manila & Selected Province",
+                marker_size=10,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False
+            )
 
     return initial_fig
 
