@@ -85,12 +85,31 @@ initial_fig = px.choropleth(
     hover_data={'2023': True},  # Show CMCI score when hovering
     labels={'2023': 'Overall CMCI Score'},
 )
-initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
+
+initial_fig.update_geos(fitbounds="geojson", visible=False, bgcolor="#C9D1D2")
+
 initial_fig.update_layout(
-    coloraxis_colorbar=dict(title='Overall CMCI Score'),
+    coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
     paper_bgcolor="#C9D1D2",
+    margin=dict(l=0, r=0, t=0, b=0),
+    width=None,   # Set the width of the entire figure
+    height=None,  # Set the height of the entire figure
+    geo=dict(
+        visible=False,
+        bgcolor='rgba(255,255,255,0)',
+        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
+        projection_scale=40,  # Increase this value further to zoom out the map
+        projection_type='mercator',  # Adjust the projection type to control the aspect ratio
+    )
 )
-initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}')
+
+
+
+
+
+
+
+
 
 province_options = [{'label': province, 'value': province} for province in p_choro['PROVINCE'] if province is not None]
 
