@@ -177,8 +177,11 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+<<<<<<< HEAD
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
+=======
+>>>>>>> 01e966449357e3a41551ec1e96f544db5c4d6082
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -525,20 +528,24 @@ page2_layout = dbc.Container([
 
     # Map
     dbc.Col([
-        dcc.Dropdown(
-            id='map-year-dropdown-province-1',
-            options=[{'label': str(year), 'value': year} for year in all_years],
-            value=2023,
-            style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
-        ),
-        html.Div([
-            html.H3('Overall CMCI Score per Province', style={'text-align': 'left', 'margin-bottom': '10px'}),
-            dcc.Loading(
-                id="loading-choropleth-map",
-                type="default",
-                children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
-            ) 
-        ], style={'text-align': 'center'}),
+            dbc.Card([
+                        dbc.CardBody([
+                            dcc.Dropdown(
+                                id='map-year-dropdown-province-1',
+                                options=[{'label': str(year), 'value': year} for year in all_years],
+                                value=2023,
+                                style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
+                            ),
+                            html.Div([
+                                html.H3('Overall CMCI Score per Province', style={'text-align': 'left', 'margin-bottom': '10px'}),
+                                dcc.Loading(
+                                    id="loading-choropleth-map",
+                                    type="default",
+                                    children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
+                                ) 
+                    ], style={'text-align': 'center'}),
+                        ])
+            ], color='light', style={'margin-bottom': '20px'})
     ], width=4),
 
     # Sidebar
@@ -561,8 +568,11 @@ page2_layout = dbc.Container([
     ], width=4),
 ], id='row4', style={'display': 'none'})
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 01e966449357e3a41551ec1e96f544db5c4d6082
 ], fluid=True)
 
 page3_layout = dbc.Container([
@@ -1084,17 +1094,17 @@ def update_choropleth(map_year):
         labels={str(map_year): 'Overall CMCI Score'},
         )
 
-    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#ADD8E6")
+    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
     initial_fig.update_layout(
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
-        paper_bgcolor="#ADD8E6",
+        paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
         #padding=dict(l=0, r=0, t=0, b=0),  # Reduce padding to increase map display size
         width=None,
         height=1000, 
         geo=dict(
             visible=False,
-            bgcolor="#ADD8E6",
+            bgcolor="#C9D1D2",
             center={'lat': 12.8797, 'lon': 121.7740}, 
             projection_scale=40 , 
             projection_type='mercator',  
@@ -1131,8 +1141,13 @@ def update_choropleth(map_year, province):
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
+<<<<<<< HEAD
         # width=None,   # Set the width of the entire figure
         height=900, 
+=======
+        width=None,  
+        height=885, 
+>>>>>>> 01e966449357e3a41551ec1e96f544db5c4d6082
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
