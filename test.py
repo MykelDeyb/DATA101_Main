@@ -177,11 +177,8 @@ pillar_images = {
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-<<<<<<< HEAD
-=======
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
 
 # Map
@@ -564,11 +561,8 @@ page2_layout = dbc.Container([
     ], width=4),
 ], id='row4', style={'display': 'none'})
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
 ], fluid=True)
 
 page3_layout = dbc.Container([
@@ -594,7 +588,11 @@ page3_layout = dbc.Container([
                                 )])
                     
                 ]),
-                    dcc.Graph(id='choropleth-map-2')  # Display the initial choropleth map
+                dcc.Loading(
+                    id="loading-choropleth-map",
+                    type="default",
+                    children=dcc.Graph(id='choropleth-map-2')  # Display the initial choropleth map
+                )
                 ])
             ]),
             ])
@@ -1133,13 +1131,8 @@ def update_choropleth(map_year, province):
         coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
         paper_bgcolor="#C9D1D2",
         margin=dict(l=0, r=0, t=0, b=0),
-<<<<<<< HEAD
-        width=None,  
-        height=600, 
-=======
         # width=None,   # Set the width of the entire figure
         height=900, 
->>>>>>> aff8bfeee3cfcdd26174440dfe091f82667821df
         geo=dict(
             visible=False,
             bgcolor='rgba(255,255,255,0)',
