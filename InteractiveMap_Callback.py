@@ -386,41 +386,33 @@ def update_bar_chart(selected_lgu):
 # Map
 @app.callback(
     Output('choropleth-map', 'figure'),
-    Input('map-year-dropdown-province-2', 'value'),
+    Input('map-year-dropdown-province', 'value'),
     Input('province-dropdown', 'value')
 )
 def update_choropleth(map_year, province):
-    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float)
-    initial_column_values = initial_column_values.fillna(0).astype(int)
+    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float).fillna(0)
 
-    initial_fig = px.choropleth(    
+    initial_fig = px.choropleth_mapbox(
         p_choro,
-        geojson=p_choro.geometry,
-        locations=p_choro.index,
+        geojson=p_choro,
+        locations=p_choro.PROVINCE,
+        featureidkey="properties.PROVINCE",
         color=initial_column_values,
         color_continuous_scale='Viridis',
-        hover_name='PROVINCE',
-        hover_data={str(map_year): True},  # Show CMCI score when hovering
-        labels={str(map_year): 'Overall CMCI Score'},
-        height=900
+        hover_name='PROVINCE',  
+        hover_data={str(map_year): True},
+        labels={map_year: 'Overall CMCI Score'},
+        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
+        mapbox_style="carto-positron",  # Choose the Mapbox map style
+        zoom=5  # Adjust the initial zoom level as needed
     )
 
-    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
     initial_fig.update_layout(
-        coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
-        paper_bgcolor="#C9D1D2",
-        margin=dict(l=0, r=0, t=0, b=0),
-        # width=None,   # Set the width of the entire figure
-        height=900, 
-        geo=dict(
-            visible=False,
-            bgcolor='rgba(255,255,255,0)',
-            center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
-            projection_scale=40,  # Increase this value further to zoom out the map
-            projection_type='mercator',  # Adjust the projection type to control the aspect ratio
+        title='Choropleth Map',
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        height=600,
     )
-
-    )
+    
     initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
     
     )
@@ -428,27 +420,30 @@ def update_choropleth(map_year, province):
     lon_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['x']
     lat_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['y']
 
-    if not province:
-        initial_fig.add_scattergeo(
+    initial_fig.add_scattermapbox(
                 lat=[lat_manila],
                 lon=[lon_manila],
                 mode='markers',
-                text="Distance from Manila & Selected Province",
+                text="Coordinates",
                 marker_size=10,
-                marker_color='rgb(235, 0, 100)'
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
             )
-    else: 
+
+    if province: 
         lon_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['x']
         lat_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['y']
 
-        initial_fig.add_scattergeo(
+        initial_fig.add_scattermapbox(
                 lat=[lat_manila, lat_selected],
                 lon=[lon_manila, lon_selected],
                 mode='markers',
-                text="Distance from Manila & Selected Province",
+                text="Coordinates",
                 marker_size=10,
                 marker_color='rgb(235, 0, 100)',
-                showlegend=False
+                showlegend=False,
+                name=""
             )
 
     return initial_fig
