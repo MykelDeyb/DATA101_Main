@@ -1197,7 +1197,7 @@ def update_bar_chart(selected_lgu):
                 title_font=dict(size=20, family='Arial Black'),
             )
         
-        fig.update_traces(hovertemplate='Pillar: %{x} <br>Score: $%{y}<extra></extra>')
+        fig.update_traces(hovertemplate='Pillar: %{x} <br>Score: %{y}<extra></extra>')
     return fig
 
 # Map 1
