@@ -378,7 +378,9 @@ def update_bar_chart(selected_lgu):
        x=pillars,
        y=lgu_data_row,
        labels={'x': 'Pillar', 'y': 'Score'},
-       title=f'Scores per Pillar for {selected_lgu}'
+       title=f'Scores per Pillar for {selected_lgu}',
+       color=pillars,
+       height=300
    )
 
    return fig
@@ -410,7 +412,7 @@ def update_choropleth(map_year, province):
     initial_fig.update_layout(
         title='Choropleth Map',
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        height=600,
+        height=787,
     )
     
     initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
@@ -425,7 +427,8 @@ def update_choropleth(map_year, province):
                 lon=[lon_manila],
                 mode='markers',
                 text="Coordinates",
-                marker_size=10,
+                marker_size=15,
+                opacity=0.8,
                 marker_color='rgb(235, 0, 100)',
                 showlegend=False,
                 name=""
@@ -436,17 +439,33 @@ def update_choropleth(map_year, province):
         lat_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['y']
 
         initial_fig.add_scattermapbox(
-                lat=[lat_manila, lat_selected],
-                lon=[lon_manila, lon_selected],
-                mode='markers',
-                text="Coordinates",
-                marker_size=10,
-                marker_color='rgb(235, 0, 100)',
-                showlegend=False,
-                name=""
-            )
+            lat=[lat_manila],
+            lon=[lon_manila],
+            mode='markers',
+            text="Manila",
+            marker_size=15,
+            opacity=0.8,
+            marker_color='rgb(235, 0, 100)',
+            showlegend=False,
+            name=""
+        )
+
+        initial_fig.add_scattermapbox(
+            lat=[lat_manila, lat_selected],
+            lon=[lon_manila, lon_selected],
+            mode='markers+lines',  # Include lines in the mode
+            text=["Manila", province],  # Adjust the text accordingly
+            marker_size=15,
+            opacity=0.8,
+            marker_color='rgb(235, 0, 100)',
+            showlegend=False,
+            name=""
+        )
+
+    initial_fig.add_trace(initial_fig.data[0])
 
     return initial_fig
+
 
 if __name__ == '__main__':
    app.run_server(debug=True)
