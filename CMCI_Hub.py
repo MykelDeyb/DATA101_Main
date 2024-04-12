@@ -1103,7 +1103,7 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
                 'showarrow': False,
                 'font': {'size': 28}
             }],
-            'height': 500
+            'height': 450
         }
         return '', {'layout': no_data_layout}, {'layout': no_data_layout}
 
