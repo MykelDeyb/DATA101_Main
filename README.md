@@ -2,7 +2,24 @@
 This Visualization Application is designed to provide a dynamic and intuitive platform for exploring and analyzing the Cities and Municipalities Competitiveness Index (CMCI) data at both the provincial and Local Government Unit (LGU) levels. Leveraging interactive maps, various charts, and dropdown menus, this application offers a comprehensive visual representation of CMCI scores in the Philippines, fostering data-driven insights and informed decision-making.
 
 # How to Run the Application 
-(ADD EXPLANATION ONCE REPOSITORY IS CLEANED)
+
+To run the application, ensure you have python and the following libraries installed: dash, plotly.express, dash_bootstrap_components, openpyxl, pathlib, pandas, geopandas, plotly.graph_objects and numpy
+
+If any of these libraries are missing, you can install them using pip:
+```python
+pip install dash plotly-express dash-bootstrap-components openpyxl pandas geopandas plotly numpy
+```
+
+Once you have all the required libraries, follow these steps to run the application:
+
+1. Open your terminal or command prompt.
+2. Navigate to the directory containing the CMCI_Hub.py file.
+3. Type the following command and press Enter:
+```python
+python CMCI_Hub.py
+```
+
+This command will start the application, and you should see output in the terminal indicating that the Dash app is running. Once the app is running, you can access it by opening a web browser and navigating to the specified URL. From there, each main page of the application may be viewed, including the homepage, visualization dashboard and interactive map, from the navigation bar. 
 
 ## Province Dashboard
 
