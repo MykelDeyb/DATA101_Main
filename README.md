@@ -1,20 +1,41 @@
 # Visualization Application
-This Visualization Application is designed to provide a dynamic and intuitive platform for exploring and analyzing the Cities and Municipalities Competitiveness Index (CMCI) data at both the provincial and Local Government Unit (LGU) levels. Leveraging interactive maps, bar charts, and dropdown menus, this application offers a comprehensive visual representation of CMCI scores, fostering data-driven insights and informed decision-making.
+This Visualization Application is designed to provide a dynamic and intuitive platform for exploring and analyzing the Cities and Municipalities Competitiveness Index (CMCI) data at both the provincial and Local Government Unit (LGU) levels. Leveraging interactive maps, various charts, and dropdown menus, this application offers a comprehensive visual representation of CMCI scores in the Philippines, fostering data-driven insights and informed decision-making.
 
 # How to Run the Application 
-(ADD EXPLANATION ONCE REPOSITORY IS CLEANED) 
+(ADD EXPLANATION ONCE REPOSITORY IS CLEANED)
 
 ## Province Dashboard
 
 ### Features 
+- Province Charts: Includes 3 charts - line chart, bar chart, and choropleth map
+- Dropdown Menus: Utilizes dropdown menus for province selection with 84 provinces available
+- Nominal Variables: The province dataset is represented by nominal variables and uses a categorical color scheme in charts
+- Line Chart: Shows selected pillar indicator scores for each province at the specified year range
+- Bar Chart: Displays distances of each province from the center of Manila in miles
+- Choropleth Map: Illustrates overall scores of all provinces
 
 ### Usage
+1. Use the dropdown menus to select provinces and specify the year range for analysis.
+2. View the line chart to observe selected pillar indicator scores for each province over time.
+3. Interpret the bar chart to understand distances of provinces from the center of Manila.
+4. Explore the choropleth map to see overall scores of provinces and observe changes based on proximity to Manila.
 
 ## LGU Dashboard
 
 ### Features 
+- LGU Charts: Includes a bar chart displaying changes over time for the selected pillar and a grouped bar chart showing the composition of overall scores for chosen LGUs
+- Sidebar Selection: Users can choose LGUs conveniently from the sidebar
+- Dynamic Search Bar: With 1,613 LGUs available, a search bar dynamically updates to ease selection
+- Clear Selection Option: Added for user convenience to clear selections easily
+- Qualitative Representation: LGUs are treated as nominal variables and use a categorical colormap in charts
+- Pillar Description: Provides a description of the chosen pillar and its indicators for context
+- Trends: Enables comparison of trends (line chart) and discovery of distribution (grouped bar chart) for in-depth analysis
 
 ### Usage 
+1. Select LGUs from the sidebar or use the dynamic search bar for easier selection.
+2. Choose a pillar and time interval to update the line chart and compare trends in pillar scores over time.
+3. Explore the grouped bar chart to discover the composition of overall scores for selected LGUs. Use the year dropdown for specific yearly data.
+4. Utilize the clear selection option for a clean slate and access additional information about pillars and indicators for better understanding throughout the dashboard page. 
 
 ## Interactive Map Page
 
@@ -22,8 +43,7 @@ This Visualization Application is designed to provide a dynamic and intuitive pl
 - Interactive Elements: Dropdown menus for selecting provinces, years, and LGUs enable seamless navigation and exploration of data
 - Choropleth Map: Utilizes the Viridis color palette for clear and detailed representation of CMCI scores, with colors changing based on the selected year
 - Reference Points: Includes a fixed reference point for Manila on the map, while the point representing the selected province dynamically adjusts for spatial context
-- Province Profil
-- e: Displays detailed statistics such as overall CMCI score, ranking, highest score rank, population, and revenue for selected provinces
+- Province Profile: Displays detailed statistics such as overall CMCI score, ranking, highest score rank, population, and revenue for selected provinces
 - LGU Profile: Provides insights into LGU-specific statistics within the selected province
 - Color-Coded Bar Chart: Showcases scores across the five pillars of competitivenes for the selected province under the LGU Profile
 
