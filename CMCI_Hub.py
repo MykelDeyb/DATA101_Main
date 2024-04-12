@@ -956,51 +956,58 @@ def clear_selected_LGUs(n_clicks):
     ]
 )
 def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
-
-
-
+    # Check if no LGUs are selected
+    if not selected_LGUs:
+        no_data_layout = {
+            'xaxis': {'visible': False},
+            'yaxis': {'visible': False},
+            'annotations': [{
+                'text': 'Please select LGUs',
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'font': {'size': 28}
+            }],
+            'height': 500
+        }
+        return '', {'layout': no_data_layout}, {'layout': no_data_layout}
 
     # Filtered LGUs
     filtered_LGUs = selected_LGUs
 
-
-
-
     # Table
     table_rows = [
-    html.Tr([
-        html.Th('LGU', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),  
-        html.Th('Category', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),
-        html.Th('Distance from MNL (km)', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),
-        html.Th('Distance from MNL (mi)', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'})
-    ])
-]
-
+        html.Tr([
+            html.Th('LGU', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),
+            html.Th('Category', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),
+            html.Th('Distance from MNL (km)', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'}),
+            html.Th('Distance from MNL (mi)', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1'})
+        ])
+    ]
 
     for i, LGU in enumerate(filtered_LGUs):
         LGU_index = pillar_data_LGU[pillar]['LGUs'].index(LGU)
         distances_km = pillar_data_LGU[pillar]['distances_km'][LGU_index]
         distances_mi = pillar_data_LGU[pillar]['distances_mi'][LGU_index]
         category = pillar_data_LGU[pillar]['categories'][LGU_index]
-       
+
         if i % 2 == 0:
-            row_style = {'background-color': '#F9F7F7'}  
+            row_style = {'background-color': '#F9F7F7'}
         else:
             row_style = {'background-color': 'white'}
-           
+
         table_rows.append(html.Tr([
-            html.Td(LGU, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),  
+            html.Td(LGU, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),
             html.Td(category, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),
             html.Td(distances_km, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),
             html.Td(distances_mi, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style})
         ]))
 
-
     # Line chart
     line_chart_data = []
     for LGU in filtered_LGUs:
         LGU_index = pillar_data_LGU[pillar]['LGUs'].index(LGU)
-        scores = pillar_data_LGU[pillar]['scores'][LGU_index]  
+        scores = pillar_data_LGU[pillar]['scores'][LGU_index]
         line_chart_data.append({
             'x': list(range(start_year, end_year + 1)),
             'y': scores[start_year - 2014:end_year - 2014 + 1],
@@ -1008,25 +1015,22 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
             'name': LGU,
         })
 
-
-
-
     # Bar chart
     bar_chart_data = []
     selected_year_index = bar_chart_year - 2014
     filtered_pillar_names = [p for p in pillar_names if p != 'overall score']
     for j, pillar_name in enumerate(filtered_pillar_names):
-        pillar_scores = []  
+        pillar_scores = []
         for LGU in filtered_LGUs:
             LGU_index = pillar_data_LGU[pillar_name]['LGUs'].index(LGU)
-            scores = pillar_data_LGU[pillar_name]['scores'][LGU_index]  
+            scores = pillar_data_LGU[pillar_name]['scores'][LGU_index]
             score = scores[selected_year_index] if scores[selected_year_index] != '-' else 0
             pillar_scores.append(score)
-       
+
         bar_chart_data.append({
-            'x': filtered_LGUs,  
-            'y': pillar_scores,  
-            'name': pillar_name,  
+            'x': filtered_LGUs,
+            'y': pillar_scores,
+            'name': pillar_name,
             'type': 'bar',
         })
     bar_chart_layout = {
@@ -1038,7 +1042,6 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
                                                                          'xaxis': {'title': 'Year'},
                                                                          'yaxis': {'title': 'Score'}}}, {
                'data': bar_chart_data, 'layout': bar_chart_layout}
-
 
 @app.callback(
     Output('pillar-info-container', 'children'),
@@ -1390,4 +1393,3 @@ app.layout = html.Div([
 
 if __name__ == '__main__':
     app.run_server(debug=False)
-
