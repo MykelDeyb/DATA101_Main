@@ -10,6 +10,7 @@ import geopandas as gpd
 import numpy as npth
 import plotly.graph_objects as go
 import numpy as np
+import copy
 
 
 # Load datasets
@@ -57,7 +58,7 @@ for sheet in workbook_PROV:
     for row in sheet.iter_rows(min_row=2, values_only=True):
         if len(row) >= 12:  
             provinces.append(row[0])
-            scores.append(row[3:12])  
+            scores.append(row[3:13])
             distances_km.append(row[1])
             distances_mi.append(row[2])
 
@@ -564,7 +565,7 @@ page2_layout = dbc.Container([
                                 dcc.Dropdown(
                                     id='scatter-year-dropdown',
                                     options=year_options,
-                                    value=2014,
+                                    value=2023,
                                     style={'width': '100%'}  
                                 ),
                             dcc.Graph(id='scatter-plot-prov')
@@ -866,45 +867,51 @@ def filter_data_by_year_range(data, selected_year):
     Output('scatter-plot-prov', 'figure'),
     [Input('scatter-year-dropdown', 'value')],
 )
+
 def update_scatter_plot_prov(selected_year):
-    filtered_data = filter_data_by_year_range(pillar_data_PROV['Overall Score'], selected_year)
+    year_index = selected_year - 2014
+    filtered_data = copy.deepcopy(pillar_data_PROV['Overall Score'])
+    filtered_scores = []
+    for score_list in filtered_data['scores']:
+        filtered_scores.append(score_list[year_index])
+    filtered_data['scores'] = filtered_scores
+
     all_scores = []
     all_distances_mi = []
     all_provinces = []
-   
+    
     for scores, distances_mi, provinces in zip(filtered_data['scores'], filtered_data['distances_mi'], filtered_data['provinces']):
-        if provinces not in all_provinces:
-            all_scores.append(scores[-1])  
+            all_scores.append(scores)  
             all_distances_mi.append(distances_mi)  
             all_provinces.append(provinces)
-   
+
     marker_colors = ['lightgreen' if distance <= 300 else 'darkgreen' for distance in all_distances_mi]
 
-
     scatter_plot_data = [{
-        'x': all_distances_mi,
-        'y': all_scores,
-        'mode': 'markers',
-        'marker': {
-            'size': 10,
-            'opacity': 0.6,
-            'color': marker_colors,  
-        },
-        'text': [f"{province}<br>Distance: {distance} mi<br>Overall Score: {score}"
-                 for province, distance, score in zip(all_provinces, all_distances_mi, all_scores)],
-        'hoverinfo': 'text',
-    }]
-   
+            'x': all_distances_mi,
+            'y': all_scores,
+            'mode': 'markers',
+            'marker': {
+                'size': 10,
+                'opacity': 0.6,
+                'color': marker_colors,  
+            },
+            'text': [f"{province}<br>Distance: {distance} mi<br>Overall Score: {score}"
+                    for province, distance, score in zip(all_provinces, all_distances_mi, all_scores)],
+            'hoverinfo': 'text',
+        }]
+    
     scatter_plot_layout = {
-        'title': 'Distance of Each Province to the Center of Manila',
-        'xaxis': {'title': 'Distance (mi)'},
-        'yaxis': {'title': 'Overall Score'},
-        'hovermode': 'closest',
-        'height': 500
-    }
+            'title': 'Distance of Each Province to the Center of Manila',
+            'xaxis': {'title': 'Distance (mi)'},
+            'yaxis': {'title': 'Overall Score'},
+            'hovermode': 'closest',
+            'height': 500
+        }
 
+    fig = go.Figure(data=scatter_plot_data, layout=scatter_plot_layout)
 
-    return {'data': scatter_plot_data, 'layout': scatter_plot_layout}
+    return fig
 
 
 @app.callback(
