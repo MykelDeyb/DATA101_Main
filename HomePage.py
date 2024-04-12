@@ -1,4 +1,4 @@
-import dash 
+import dash
 import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output
@@ -11,19 +11,22 @@ import numpy as npth
 import plotly.graph_objects as go
 import numpy as np
 
+
 # Load datasets
 dataset_folder = Path('Datasets/')
 workbook_LGU = load_workbook(dataset_folder / 'LGU_Data/LGUs.xlsx')
 
+
 pillar_data_LGU = {}
 pillar_data_PROV = {}
+
 
 for sheet in workbook_LGU:
     LGUs = []
     scores = []
     distances_km = []
     distances_mi = []
-    categories = [] 
+    categories = []
     for row in sheet.iter_rows(min_row=2, values_only=True):
         if len(row) >= 13:  
             LGUs.append(row[0])
@@ -32,16 +35,19 @@ for sheet in workbook_LGU:
             distances_mi.append(row[12])
             categories.append(row[13])  
 
+
     pillar_name = sheet.title
     pillar_data_LGU[pillar_name] = {
         'LGUs': LGUs,
         'scores': scores,
         'distances_km': distances_km,
         'distances_mi': distances_mi,
-        'categories': categories 
+        'categories': categories
     }
 
+
 workbook_PROV = load_workbook(dataset_folder / 'Province_Data/Prov Dataset.xlsx')
+
 
 for sheet in workbook_PROV:
     provinces = []
@@ -55,6 +61,7 @@ for sheet in workbook_PROV:
             distances_km.append(row[1])
             distances_mi.append(row[2])
 
+
     pillar_name = sheet.title
     pillar_data_PROV[pillar_name] = {
         'provinces': provinces,
@@ -63,6 +70,7 @@ for sheet in workbook_PROV:
         'distances_mi': distances_mi
     }
 
+
 pillar_names = list(pillar_data_LGU.keys())
 pillar_names = ['Overall Score','Economic Dynamism',
                 'Government Efficiency',
@@ -70,9 +78,12 @@ pillar_names = ['Overall Score','Economic Dynamism',
                 'Innovation',
                 'Resiliency']
 
+
 all_years = list(range(2014, 2024))
 
+
 LGUs = list(set(LGU for pillar in pillar_names for LGU in pillar_data_LGU[pillar]['LGUs']))
+
 
 pillar_descriptions = {
     'Overall Score': {
@@ -94,6 +105,7 @@ pillar_descriptions = {
         'Description': 'Refers to the ability of a locality to harness its creative potential to improve or sustain current levels of productivity. It hinges mainly on the development of creative capital which are human resources, research capabilities, and networking capacities. Innovation was only added starting 2022.'
     }
 }
+
 
 pillar_indicators = {
     'Economic Dynamism': [
@@ -166,6 +178,7 @@ pillar_indicators = {
     ]
 }
 
+
 pillar_images = {
     'Overall Score': 'https://i.ibb.co/smhd96w/overall-score-3.png',
     'Economic Dynamism': 'https://i.ibb.co/hWH7fsX/economic-dynamism.png',
@@ -175,9 +188,12 @@ pillar_images = {
     'Innovation': 'https://i.ibb.co/BGcySdJ/innovation.png'
 }
 
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
+
 workbook = load_workbook(dataset_folder / 'InteractiveMap_Data/InteractiveMap_Profile.xlsx')
+
 
 # Map
 file_paths = [
@@ -201,8 +217,11 @@ file_paths = [
 ]
 
 
+
+
 # Read each file and append to a list
 ph_list = [gpd.read_file(file) for file in file_paths]
+
 
 # Combine all GeoDataFrames in the list into a single GeoDataFrame
 ph = gpd.GeoDataFrame(pd.concat(ph_list, ignore_index=True), crs=ph_list[0].crs)
@@ -237,10 +256,13 @@ ph.loc[ph['PROVINCE'] == 'Zamboanga del Sur', 'PROVINCE'] = 'Zamboanga Del Sur'
 ph.loc[ph['PROVINCE'] == 'Metropolitan Manila', 'PROVINCE'] = 'Metro Manila'
 p_choro = pd.merge(ph, p_score,  left_on='PROVINCE', right_on='PROVINCE / LGU', how='left', indicator=True)
 
+
 province_options = [{'label': province, 'value': province} for province in p_choro['PROVINCE'] if province is not None]
 
-# Province profile 
+
+# Province profile
 province_sheet = workbook['Province']
+
 
 province = []
 region = []
@@ -248,17 +270,20 @@ population = []
 province_revenue = []
 rank = []
 
+
 for row in province_sheet.iter_rows(min_row=2, values_only=True):
    region.append(row[1])
    population.append(row[2])
    province_revenue.append(row[3])
    rank.append(row[4])
 
+
 province_data = [row[0].value for row in province_sheet.iter_rows(min_row=2)]
 region_data = [row[1].value for row in province_sheet.iter_rows(min_row=2)]
 population_data = [row[2].value for row in province_sheet.iter_rows(min_row=2)]
 province_revenue_data = [row[3].value for row in province_sheet.iter_rows(min_row=2)]
 rank_data = [row[4].value for row in province_sheet.iter_rows(min_row=2)]
+
 
 def get_province_region(province):
    try:
@@ -275,12 +300,16 @@ def get_province_population(province):
        return 'No data available'
 
 
+
+
 def get_province_revenue(province):
    try:
        index = province_data.index(province)
        return province_revenue[index]
    except ValueError:
        return 'No data available'
+
+
 
 
 def get_province_rank(province):
@@ -293,11 +322,13 @@ def get_province_rank(province):
 # LGU Profile
 lgu_sheet = workbook['LGU']
 
+
 lgu = []
 category = []
 percentage = []
 lgu_province = []
 revenue = []
+
 
 for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
    lgu.append(row[0])
@@ -306,11 +337,13 @@ for row in lgu_sheet.iter_rows(min_row=2, values_only=True):
    lgu_province.append(row[3])
    revenue.append(row[4])
 
+
 lgu_data = [row[0].value for row in lgu_sheet.iter_rows(min_row=2, max_col=1)]
 category_data = [row[1].value for row in lgu_sheet.iter_rows(min_row=2, max_col=2)]
 lgu_province_data = [row[3].value for row in lgu_sheet.iter_rows(min_row=2, max_col=4)]
 revenue_data = [row[4].value for row in lgu_sheet.iter_rows(min_row=2, max_col=5)]
 lgu_options = [{'label': lgu_name, 'value': lgu_name} for lgu_name in lgu_data if lgu_name is not None]
+
 
 def get_lgu_province(selected_lgu):
    try:
@@ -319,12 +352,14 @@ def get_lgu_province(selected_lgu):
    except ValueError:
        return 'No data available'
 
+
 def get_lgu_category(selected_lgu):
    try:
        index = lgu_data.index(selected_lgu)
        return category_data[index]
    except ValueError:
        return 'No data available'
+
 
 def get_lgu_revenue(selected_lgu):
    try:
@@ -333,7 +368,10 @@ def get_lgu_revenue(selected_lgu):
    except ValueError:
        return 'No data available'
 
+
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP],suppress_callback_exceptions=True)
+
+
 
 
 page1_layout = html.Div(
@@ -361,6 +399,11 @@ page1_layout = html.Div(
         )
     ]
 )
+available_years = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+year_options = [{'label': str(year), 'value': year} for year in available_years]
+
+
+
 
 page2_layout = dbc.Container([
     # Header
@@ -405,9 +448,10 @@ page2_layout = dbc.Container([
         ], style={'display': 'flex', 'flex-direction': 'row', 'gap': '20px', 'padding': '20px', 'width':'100%','margin-right':'20px'}),
     ], id='header', style={'display': 'flex', 'flex-direction': 'row', 'text-align': 'center'}),
 
+
     # Row 2 (Displayed conditionally)
     dbc.Row([
-        # First column 
+        # First column
         dbc.Col([
             dbc.Card([
                 dbc.CardBody([
@@ -426,9 +470,10 @@ page2_layout = dbc.Container([
                 ])
             ], color='light', style={'margin-bottom': '20px'})
         ], id='row2-col2', width=6),
-    
+   
 
-        # Third column 
+
+        # Third column
         dbc.Col([
                 dbc.Card([
                     dbc.CardBody([
@@ -449,9 +494,10 @@ page2_layout = dbc.Container([
             ], id='row2-col3', width=3)
     ], id='row2', style={'display': 'none'}),
 
+
     # Row 3 (Displayed conditionally)
     dbc.Row([
-        # First column 
+        # First column
         dbc.Col([
             dbc.Card([
             dbc.CardBody([
@@ -460,7 +506,7 @@ page2_layout = dbc.Container([
                 ])
             ], color='light', style={'margin-bottom': '20px'})
         ], id='row3-col1', width=3),
-        # Second column 
+        # Second column
         dbc.Col([
             dbc.Card([
                 dbc.CardBody([
@@ -480,7 +526,7 @@ page2_layout = dbc.Container([
                 ])
             ], color='light', style={'margin-bottom': '20px'})
         ], id='row3-col2', width=6),
-        # Third column 
+        # Third column
         dbc.Col([
              dbc.Card([
                 dbc.CardBody([
@@ -493,10 +539,11 @@ page2_layout = dbc.Container([
         ], id='row3-col3', width=3)
     ], id='row3', style={'display': 'none'}),
 
+
     # Row 4 (Displayed conditionally)
     dbc.Row([        
     # Column 1
-    dbc.Col([ 
+    dbc.Col([
             #Row 1: Line chart
             dbc.Row([
                 dbc.Card([
@@ -506,20 +553,27 @@ page2_layout = dbc.Container([
                             dcc.Graph(id='line-chart-prov'),
                         ]),
                     ])
-                ],color='light', style={'margin-bottom': '20px','margin-right':'20px'})
+                ],color='light', style={'margin-bottom': '20px','margin-right':'20px','height':'400px'})
             ]),
-            #Row 2: Bar Chart
+            #Row 2: Scatter Chart
             dbc.Row([
                 dbc.Card([
                     dbc.CardBody([
                         html.Div([
-                            html.H3('Distance of Each Province to the Center of Manila', style={'text-align': 'center'}),
-                            dcc.Graph(id='bar-chart-prov')
+                            html.H3('Overall Score vs Distance', style={'text-align': 'center'}),
+                                dcc.Dropdown(
+                                    id='scatter-year-dropdown',
+                                    options=year_options,
+                                    value=2014,
+                                    style={'width': '100%'}  
+                                ),
+                            dcc.Graph(id='scatter-plot-prov')
                         ])
                     ])
-                ],color='light', style={'margin-bottom': '20px', 'margin-right':'20px'})
+                ],color='light', style={'margin-bottom': '20px', 'margin-right':'25px','height':'600px'})
             ])
         ], width=4, style={'padding-left': '20px'}),
+
 
     # Map
     dbc.Col([
@@ -532,16 +586,17 @@ page2_layout = dbc.Container([
                                 style={'width': '80px', 'display': 'inline-block', 'vertical-align': 'middle','margin-top': '10px'}
                             ),
                             html.Div([
-                                html.H3('Overall CMCI Score per Province', style={'text-align': 'left', 'margin-bottom': '10px'}),
+                                html.H3('Overall CMCI Score per Province', style={'text-align': '-webkit-center',  'margin': '0 0 10px 0','display': 'inline-block','margin-top':'0'}),
                                 dcc.Loading(
                                     id="loading-choropleth-map",
                                     type="default",
-                                    children=dcc.Graph(id='choropleth-map-1', style={'height':'1000px','width': '100%'})
-                                ) 
-                    ], style={'text-align': 'center'}),
+                                    children=dcc.Graph(id='choropleth-map-1', style={'height': '890px','width': '100%'})
+                                )
+                    ], style={'text-align': 'center', 'display': 'inline-block','margin': '0 0 10px 0' }),
                         ])
-            ], color='light', style={'margin-bottom': '20px'})
-    ], width=4),
+            ], color='light', style={'margin-bottom': '20px','height':'1020px'})
+    ], width=5),
+
 
     # Sidebar
     dbc.Col([
@@ -554,19 +609,21 @@ page2_layout = dbc.Container([
                         id='province-checkboxes',
                         options=[{'label': province, 'value': province} for province in provinces],
                         value=[],
-                        style={'overflowY': 'scroll', 'height': '400px'}
+                        style={'overflowY': 'scroll', 'height': '890px'}
                     ),
                     html.Button('Clear Selection', id='clear-selection-button-prov', n_clicks=0)
                 ], style={'margin-left': '20px'}),
             ]),
-        ], color='light', style={'margin-bottom': '20px'})
-    ], width=4),
+        ], color='light', style={'margin-bottom': '20px','height':'1020px'})
+    ], width=3),
 ], id='row4', style={'display': 'none'})
+
 
 ], fluid=True)
 
+
 page3_layout = dbc.Container([
-  
+ 
    dbc.Row([
        
    # First column
@@ -581,14 +638,18 @@ page3_layout = dbc.Container([
                     dbc.Row([
                     html.Label('Select Year', style={'font-weight': 'bold'}),
                     dcc.Dropdown(
-                                    id='map-year-dropdown-province-2',
+                                    id='map-year-dropdown-province',
                                     options=[{'label': str(year), 'value': year} for year in all_years],
                                     value=2023,
                                     style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
                                 )])
-                    
+                   
                 ]),
-                    dcc.Graph(id='choropleth-map-2')  # Display the initial choropleth map
+                    dcc.Loading(
+                        id="loading-choropleth-map",
+                        type="default",
+                        children=dcc.Graph(id='choropleth-map')
+                    )
                 ])
             ]),
             ])
@@ -596,7 +657,7 @@ page3_layout = dbc.Container([
        
        
    ]),
-  
+ 
    # Second column
    dbc.Col([
        html.Div([
@@ -630,6 +691,7 @@ page3_layout = dbc.Container([
                 ], style={'margin-bottom': '20px'})
                 ])
            ])], color='light'),
+
 
            # Card 3, Bottom Right
            dbc.Card([dbc.CardBody([
@@ -701,13 +763,15 @@ navbar = dbc.NavbarSimple(
             dbc.Button("🗾 INTERACTIVE MAP", href="/page-3", color="secondary")
         ],
 
+
             className="d-flex justify-content-center"
         )
     ],
-    color="dark", 
+    color="dark",
     dark=True,  
     style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
 )
+
 
 @app.callback(
     [Output('row2', 'style'), Output('row3', 'style'), Output('row4', 'style')],
@@ -720,9 +784,6 @@ def update_row_visibility(level):
     return row2_style, row3_style, row4_style
 
 
-
-
-
 @app.callback(
     Output('pillar-dropdown', 'value'),
     [Input('level-dropdown', 'value')]
@@ -730,6 +791,7 @@ def update_row_visibility(level):
 def set_pillar_dropdown(level):
     if level == 'Province' or level == 'LGU':
         return 'Overall Score'
+
 
 @app.callback(
     Output('province-checkboxes', 'options'),
@@ -742,7 +804,8 @@ def update_province_options_prov(search_value):
         filtered_provinces = [province for province in provinces if search_value.lower() in province.lower()]
         return [{'label': province, 'value': province} for province in filtered_provinces]
 
-# Callback to clear selected provinces 
+
+# Callback to clear selected provinces
 @app.callback(
     Output('province-checkboxes', 'value'),
     [Input('clear-selection-button-prov', 'n_clicks')]
@@ -753,7 +816,7 @@ def clear_selected_provinces(n_clicks):
     else:
         raise dash.exceptions.PreventUpdate
 
-# Callback for line chart
+
 @app.callback(
     Output('line-chart-prov', 'figure'),
     [
@@ -769,61 +832,105 @@ def update_data_prov(pillar, start_year, end_year, selected_provinces):
     filtered_provinces = []
     filtered_scores = []
    
-    # Colors 
+    # Colors
     color_palette = px.colors.qualitative.Plotly
+   
+    # Filter data for selected provinces
     for index, (province, scores) in enumerate(zip(selected_data['provinces'], selected_data['scores'])):
         if province in selected_provinces:
             filtered_provinces.append(province)
             filtered_scores.append(scores)
+   
+    if not filtered_provinces:
+        no_data_layout = {
+            'xaxis': {'visible': False},
+            'yaxis': {'visible': False},
+            'annotations': [{
+                'text': 'No matching data found',
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'font': {'size': 28}
+        }],
+        'height': 300  
+    }
+        return {'layout': no_data_layout}
+   
+    else:
+        line_chart_data = []
+        for province, scores, color in zip(filtered_provinces, filtered_scores, color_palette):
+            line_chart_data.append({
+                'x': list(range(start_year - 1, end_year)),
+                'y': scores,
+                'mode': 'lines',
+                'name': province,
+                'line': {'color': color}
+            })
 
-    line_chart_data = []
-    for province, scores, color in zip(filtered_provinces, filtered_scores, color_palette):
-        line_chart_data.append({
-            'x': list(range(start_year - 1, end_year)),
-            'y': scores,
-            'mode': 'lines',
-            'name': province,
-            'line': {'color': color}
-        })
 
-    return {'data': line_chart_data, 'layout': {'title': f'{pillar} scores by Province over Time',
-                                                'xaxis': {'title': 'Year'},
-                                                'yaxis': {'title': 'Score'}}}
+        return {'data': line_chart_data, 'layout': {'title': f'{pillar} scores by Province over Time',
+                                                    'xaxis': {'title': 'Year'},
+                                                    'yaxis': {'title': 'Score'},
+                                                    'height': 300}}
+
+
+def filter_data_by_year_range(data, selected_year):
+    filtered_data = {'provinces': [], 'scores': [], 'distances_mi': []}
+   
+    for province, scores, distance_mi in zip(data['provinces'], data['scores'], data['distances_mi']):
+        if any(selected_year <= year <= selected_year for year in range(2014, 2024)):
+            # Add province data to filtered data
+            filtered_data['provinces'].append(province)
+            filtered_data['scores'].append(scores)
+            filtered_data['distances_mi'].append(distance_mi)
+   
+    return filtered_data
+
 
 @app.callback(
-    Output('bar-chart-prov', 'figure'),
-    [
-        Input('pillar-dropdown', 'value'),
-        Input('start-year-dropdown', 'value'),
-        Input('end-year-dropdown', 'value'),
-        Input('province-checkboxes', 'value')
-    ]
+    Output('scatter-plot-prov', 'figure'),
+    [Input('scatter-year-dropdown', 'value')],
 )
-def update_bar_chart_prov(pillar, start_year, end_year, selected_provinces):
-    # Bar chart data
-    bar_chart_selected_data = pillar_data_PROV[pillar]
-    bar_chart_filtered_provinces = []
-    bar_chart_filtered_distances_mi = []
-    for province, distance_mi in zip(bar_chart_selected_data['provinces'], bar_chart_selected_data['distances_mi']):
-        if province in selected_provinces:
-            bar_chart_filtered_provinces.append(province)
-            bar_chart_filtered_distances_mi.append(distance_mi)
+def update_scatter_plot_prov(selected_year):
+    filtered_data = filter_data_by_year_range(pillar_data_PROV['Overall Score'], selected_year)
+    all_scores = []
+    all_distances_mi = []
+    all_provinces = []
+   
+    for scores, distances_mi, provinces in zip(filtered_data['scores'], filtered_data['distances_mi'], filtered_data['provinces']):
+        if provinces not in all_provinces:
+            all_scores.append(scores[-1])  
+            all_distances_mi.append(distances_mi)  
+            all_provinces.append(provinces)
+   
+    marker_colors = ['lightgreen' if distance <= 300 else 'darkgreen' for distance in all_distances_mi]
 
-    bar_chart_data = [{
-        'x': bar_chart_filtered_provinces,
-        'y': bar_chart_filtered_distances_mi,
-        'type': 'bar',
-        'marker': {'color': px.colors.qualitative.Plotly} 
+
+    scatter_plot_data = [{
+        'x': all_distances_mi,
+        'y': all_scores,
+        'mode': 'markers',
+        'marker': {
+            'size': 10,
+            'opacity': 0.6,
+            'color': marker_colors,  
+        },
+        'text': [f"{province}<br>Distance: {distance} mi<br>Overall Score: {score}"
+                 for province, distance, score in zip(all_provinces, all_distances_mi, all_scores)],
+        'hoverinfo': 'text',
     }]
-
-    # Bar chart layout
-    bar_chart_layout = {
-        'title': 'Distance (in mi)',
-        'xaxis': {'title': 'Province'},
-        'yaxis': {'title': 'Distance (in mi)'}
+   
+    scatter_plot_layout = {
+        'title': 'Distance of Each Province to the Center of Manila',
+        'xaxis': {'title': 'Distance (mi)'},
+        'yaxis': {'title': 'Overall Score'},
+        'hovermode': 'closest',
+        'height': 500
     }
 
-    return {'data': bar_chart_data, 'layout': bar_chart_layout}
+
+    return {'data': scatter_plot_data, 'layout': scatter_plot_layout}
+
 
 @app.callback(
     Output('LGU-checkboxes', 'options'),
@@ -837,6 +944,8 @@ def update_LGU_options(search_value):
         filtered_LGUs = [LGU for LGU in LGUs if search_value.lower() in LGU.lower()]
         sorted_filtered_LGUs = sorted(filtered_LGUs)
         return [{'label': LGU, 'value': LGU} for LGU in sorted_filtered_LGUs]
+
+
 
 
 @app.callback(
@@ -867,8 +976,12 @@ def clear_selected_LGUs(n_clicks):
 def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
 
 
+
+
     # Filtered LGUs
     filtered_LGUs = selected_LGUs
+
+
 
 
     # Table
@@ -881,23 +994,25 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
     ])
 ]
 
+
     for i, LGU in enumerate(filtered_LGUs):
         LGU_index = pillar_data_LGU[pillar]['LGUs'].index(LGU)
         distances_km = pillar_data_LGU[pillar]['distances_km'][LGU_index]
         distances_mi = pillar_data_LGU[pillar]['distances_mi'][LGU_index]
         category = pillar_data_LGU[pillar]['categories'][LGU_index]
-        
+       
         if i % 2 == 0:
             row_style = {'background-color': '#F9F7F7'}  
         else:
             row_style = {'background-color': 'white'}
-            
+           
         table_rows.append(html.Tr([
             html.Td(LGU, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),  
             html.Td(category, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),
             html.Td(distances_km, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style}),
             html.Td(distances_mi, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', **row_style})
         ]))
+
 
     # Line chart
     line_chart_data = []
@@ -910,6 +1025,8 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
             'mode': 'lines',
             'name': LGU,
         })
+
+
 
 
     # Bar chart
@@ -940,6 +1057,7 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
                                                                          'yaxis': {'title': 'Score'}}}, {
                'data': bar_chart_data, 'layout': bar_chart_layout}
 
+
 @app.callback(
     Output('pillar-info-container', 'children'),
     [Input('pillar-dropdown', 'value')]
@@ -947,15 +1065,16 @@ def update_data(pillar, start_year, end_year, selected_LGUs, bar_chart_year):
 def update_pillar_info(pillar):
     if pillar in pillar_descriptions:
         description = pillar_descriptions[pillar]['Description']
-        image_url = pillar_images.get(pillar, '') 
+        image_url = pillar_images.get(pillar, '')
         return html.Div([
             html.H3('Pillar Description', style={'text-align': 'center'}),
             html.H5(f'{pillar.upper()}', style={'text-align': 'center'}),
-            html.Img(src=image_url, style={'display': 'block', 'margin': 'auto','width': '50%'}), 
+            html.Img(src=image_url, style={'display': 'block', 'margin': 'auto','width': '50%'}),
             html.P(description, style={'text-align': 'justify'})
         ], style={'margin': 'auto', 'width': '80%', 'height':'100%'})
     else:
         return 'No information available for selected pillar'
+
 
 @app.callback(
     Output('pillar-indicators-container', 'children'),
@@ -970,6 +1089,7 @@ def update_pillar_indicators_table(pillar):
     ], style={'width': '100%'})
 
 
+# Descriptions
 @app.callback(
    [
        Output('region-label', 'children'),
@@ -988,11 +1108,11 @@ def update_labels(province):
        province_revenue = get_province_revenue(province)
        province_rank = get_province_rank(province)
 
+
        return province_region, province_population, province_revenue, province_rank
    else:
        return '-', '-', '-', '-'
-
-# Descriptions
+   
 @app.callback(
    [
        Output('province-label', 'children'),
@@ -1009,9 +1129,11 @@ def update_labels(selected_lgu):
        lgu_category = get_lgu_category(selected_lgu)
        lgu_revenue = get_lgu_revenue(selected_lgu)
 
+
        return lgu_province, lgu_category, lgu_revenue
    else:
        return '-', '-', '-'
+
 
 def get_pillar_description(selected_pillar):
    pillar_descriptions = {
@@ -1030,11 +1152,9 @@ def get_pillar_description(selected_pillar):
 )
 def update_pillar_description(selected_pillar):
     if not selected_pillar:
-        return "-" 
+        return "-"
     else:
         return get_pillar_description(selected_pillar)
-    
-
 
 
 # Bar Chart
@@ -1046,18 +1166,24 @@ def update_bar_chart(selected_lgu):
    if not selected_lgu:
        return {}
 
+
    lgu_index = lgu_data.index(selected_lgu) + 2
    lgu_data_row = list(lgu_sheet.iter_rows(min_row=lgu_index, max_row=lgu_index, min_col=6, max_col=10, values_only=True))[0]
    pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
+
 
    fig = px.bar(
        x=pillars,
        y=lgu_data_row,
        labels={'x': 'Pillar', 'y': 'Score'},
-       title=f'Scores per Pillar for {selected_lgu}'
+       title=f'Scores per Pillar for {selected_lgu}',
+       color=pillars,
+       height=300
    )
 
+
    return fig
+
 
 # Map 1
 @app.callback(
@@ -1065,108 +1191,171 @@ def update_bar_chart(selected_lgu):
     Input('map-year-dropdown-province-1', 'value')
 )
 def update_choropleth(map_year):
-    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float)
-    initial_column_values = initial_column_values.fillna(0).astype(int)
+    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float).fillna(0)
 
 
-    initial_fig = px.choropleth(
+    initial_fig = px.choropleth_mapbox(
         p_choro,
-        geojson=p_choro.geometry,
-        locations=p_choro.index,
+        geojson=p_choro,
+        locations=p_choro.PROVINCE,
+        featureidkey="properties.PROVINCE",
         color=initial_column_values,
         color_continuous_scale='Viridis',
-        hover_name='PROVINCE',
-        hover_data={str(map_year): True},  # Show CMCI score when hovering
-        labels={str(map_year): 'Overall CMCI Score'},
-        )
+        hover_name='PROVINCE',  
+        hover_data={str(map_year): True},
+        labels={map_year: 'Overall CMCI Score'},
+        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
+        mapbox_style="carto-positron",  # Choose the Mapbox map style
+        zoom=5  # Adjust the initial zoom level as needed
+    )
 
-    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
+
     initial_fig.update_layout(
-        coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
-        paper_bgcolor="#C9D1D2",
-        margin=dict(l=0, r=0, t=0, b=0),
-        #padding=dict(l=0, r=0, t=0, b=0),  # Reduce padding to increase map display size
-        width=None,
-        height=1000, 
-        geo=dict(
-            visible=False,
-            bgcolor="#C9D1D2",
-            center={'lat': 12.8797, 'lon': 121.7740}, 
-            projection_scale=40 , 
-            projection_type='mercator',  
+        title='Choropleth Map',
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        height=900,
     )
-    )
-    initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}')
-
-    return initial_fig
-
-# Map 2
-@app.callback(
-    Output('choropleth-map-2', 'figure'),
-    Input('map-year-dropdown-province-2', 'value'),
-    Input('province-dropdown', 'value')
-)
-def update_choropleth(map_year, province):
-    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float)
-    initial_column_values = initial_column_values.fillna(0).astype(int)
-
-    initial_fig = px.choropleth(    
-        p_choro,
-        geojson=p_choro.geometry,
-        locations=p_choro.index,
-        color=initial_column_values,
-        color_continuous_scale='Viridis',
-        hover_name='PROVINCE',
-        hover_data={str(map_year): True},  # Show CMCI score when hovering
-        labels={str(map_year): 'Overall CMCI Score'},
-        height=900
-    )
-
-    initial_fig.update_geos(fitbounds="locations", visible=False, bgcolor="#C9D1D2")
-    initial_fig.update_layout(
-        coloraxis_colorbar=dict(title='Overall CMCI Score', len=0.5, yanchor='top', y=0.9),
-        paper_bgcolor="#C9D1D2",
-        margin=dict(l=0, r=0, t=0, b=0),
-        width=None,  
-        height=885, 
-        geo=dict(
-            visible=False,
-            bgcolor='rgba(255,255,255,0)',
-            center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
-            projection_scale=40,  # Increase this value further to zoom out the map
-            projection_type='mercator',  # Adjust the projection type to control the aspect ratio
-    )
-
-    )
+   
     initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
-    
+   
     )
+
 
     lon_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['x']
     lat_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['y']
 
-    if not province:
-        initial_fig.add_scattergeo(
+
+    initial_fig.add_scattermapbox(
                 lat=[lat_manila],
                 lon=[lon_manila],
                 mode='markers',
-                text="Distance from Manila & Selected Province",
-                marker_size=10,
-                marker_color='rgb(235, 0, 100)'
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
             )
-    else: 
+
+
+    if province:
         lon_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['x']
         lat_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['y']
 
-        initial_fig.add_scattergeo(
+
+        initial_fig.add_scattermapbox(
+                lat=[lat_manila],
+                lon=[lon_manila],
+                mode='markers',
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
+            )
+        initial_fig.add_scattermapbox(
                 lat=[lat_manila, lat_selected],
                 lon=[lon_manila, lon_selected],
                 mode='markers',
-                text="Distance from Manila & Selected Province",
-                marker_size=10,
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
                 marker_color='rgb(235, 0, 100)',
-                showlegend=False
+                showlegend=False,
+                name=""
             )
+       
+    initial_fig.add_trace(initial_fig.data[0])
+
+
+    return initial_fig
+
+
+# Map 2
+@app.callback(
+    Output('choropleth-map', 'figure'),
+    Input('map-year-dropdown-province', 'value'),
+    Input('province-dropdown', 'value')
+)
+def update_choropleth(map_year, province):
+    initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float).fillna(0)
+
+
+    initial_fig = px.choropleth_mapbox(
+        p_choro,
+        geojson=p_choro,
+        locations=p_choro.PROVINCE,
+        featureidkey="properties.PROVINCE",
+        color=initial_column_values,
+        color_continuous_scale='Viridis',
+        hover_name='PROVINCE',  
+        hover_data={str(map_year): True},
+        labels={map_year: 'Overall CMCI Score'},
+        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
+        mapbox_style="carto-positron",  # Choose the Mapbox map style
+        zoom=5  # Adjust the initial zoom level as needed
+    )
+
+
+    initial_fig.update_layout(
+        title='Choropleth Map',
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        height=787,
+    )
+   
+    initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
+   
+    )
+
+
+    lon_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['x']
+    lat_manila = ph.loc[ph['PROVINCE'] == "Metro Manila", 'geometry'].get_coordinates().iloc[0]['y']
+
+
+    initial_fig.add_scattermapbox(
+                lat=[lat_manila],
+                lon=[lon_manila],
+                mode='markers',
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
+            )
+
+
+    if province:
+        lon_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['x']
+        lat_selected = ph.loc[ph['PROVINCE'] == province, 'geometry'].get_coordinates().iloc[0]['y']
+
+
+        initial_fig.add_scattermapbox(
+                lat=[lat_manila],
+                lon=[lon_manila],
+                mode='markers',
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
+            )
+        initial_fig.add_scattermapbox(
+                lat=[lat_manila, lat_selected],
+                lon=[lon_manila, lon_selected],
+                mode='markers',
+                text="Coordinates",
+                marker_size=25,
+                opacity=0.8,
+                marker_color='rgb(235, 0, 100)',
+                showlegend=False,
+                name=""
+            )
+       
+    initial_fig.add_trace(initial_fig.data[0])
+
 
     return initial_fig
 
@@ -1183,11 +1372,14 @@ def display_page(pathname):
     else:
         return '404 - Page not found'
 
+
 app.layout = html.Div([
     dcc.Location(id='url', refresh=False),
     navbar,
     html.Div(id='page-content')
 ])
 
+
 if __name__ == '__main__':
     app.run_server(debug=False)
+
