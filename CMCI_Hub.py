@@ -1163,30 +1163,42 @@ def update_pillar_description(selected_pillar):
    Input('lgu-dropdown', 'value')
 )
 def update_bar_chart(selected_lgu):
-   if not selected_lgu:
-       return {}
+    if not selected_lgu:
+        no_data_layout = {
+            'xaxis': {'visible': False},
+            'yaxis': {'visible': False},
+            'annotations': [{
+                'text': 'Please select an LGU above.',
+                'xref': 'paper',
+                'yref': 'paper',
+                'showarrow': False,
+                'font': {'size': 28}
+        }],
+        'height': 300  
+    }
+        return {'layout': no_data_layout}
+   
+    else:
 
-   lgu_index = lgu_data.index(selected_lgu) + 2
-   lgu_data_row = list(lgu_sheet.iter_rows(min_row=lgu_index, max_row=lgu_index, min_col=6, max_col=10, values_only=True))[0]
-   pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
+        lgu_index = lgu_data.index(selected_lgu) + 2
+        lgu_data_row = list(lgu_sheet.iter_rows(min_row=lgu_index, max_row=lgu_index, min_col=6, max_col=10, values_only=True))[0]
+        pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
 
-   fig = px.bar(
-       x=pillars,
-       y=lgu_data_row,
-       labels={'x': 'Pillar', 'y': 'Score'},
-       color=pillars,
-       height=400,
-       title=f'Scores per Pillar for {selected_lgu}'
-   )
-   fig.update_layout(
-            showlegend=False,
-            title_font=dict(size=20, family='Arial Black'),
+        fig = px.bar(
+            x=pillars,
+            y=lgu_data_row,
+            labels={'x': 'Pillar', 'y': 'Score'},
+            color=pillars,
+            height=400,
+            title=f'Scores per Pillar for {selected_lgu}'
         )
-    
-   fig.update_traces(hovertemplate='Pillar: %{x} <br>Score: $%{y}<extra></extra>')
-   return fig
-
-
+        fig.update_layout(
+                showlegend=False,
+                title_font=dict(size=20, family='Arial Black'),
+            )
+        
+        fig.update_traces(hovertemplate='Pillar: %{x} <br>Score: $%{y}<extra></extra>')
+    return fig
 
 # Map 1
 @app.callback(
@@ -1195,7 +1207,6 @@ def update_bar_chart(selected_lgu):
 )
 def update_choropleth(map_year):
     initial_column_values = p_choro.set_index('PROVINCE')[str(map_year)].replace('-', np.nan).astype(float).fillna(0)
-
 
     initial_fig = px.choropleth_mapbox(
         p_choro,
