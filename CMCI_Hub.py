@@ -648,7 +648,7 @@ page3_layout = dbc.Container([
                     
                     
                 ]),
-                    dcc.Graph(id='choropleth-map')  # Display the initial choropleth map
+                    dcc.Graph(id='choropleth-map')
                 ])
             ]),
             ], style={'height': '953px'})
@@ -745,7 +745,7 @@ navbar = dbc.NavbarSimple(
     ],
     color="dark",
     dark=True,  
-    style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}  # Apply font style
+    style={"font-family": "Arial, sans-serif", "font-weight": "bold", "color": "black"}
 )
 
 
@@ -1102,7 +1102,7 @@ def update_labels(province):
             html.Td(province_revenue, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'}),
             html.Td(province_rank, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'})
         ], style={'width': '100%'}))
-       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})]  # Center the table within the card
+       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})]
     else:
         return [[]]  # Return an empty list to match the expected output type
 
@@ -1133,9 +1133,9 @@ def update_labels(selected_lgu):
             html.Td(lgu_category, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '33%'}),
             html.Td(lgu_revenue, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '33%'})
         ], style={'width': '100%'}))
-       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})]  # Center the table within the card
+       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})] 
     else:
-        return [[]]  # Return an empty list to match the expected output type
+        return [[]]  
 
 def get_pillar_description(selected_pillar):
    pillar_descriptions = {
@@ -1218,9 +1218,9 @@ def update_choropleth(map_year):
         hover_name='PROVINCE',  
         hover_data={str(map_year): True},
         labels={map_year: 'Overall CMCI Score'},
-        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
-        mapbox_style="carto-positron",  # Choose the Mapbox map style
-        zoom=5  # Adjust the initial zoom level as needed
+        center={'lat': 12.8797, 'lon': 121.7740}, 
+        mapbox_style="carto-positron", 
+        zoom=5 
     )
 
 
@@ -1305,9 +1305,9 @@ def update_choropleth(map_year, province):
         hover_name='PROVINCE',  
         hover_data={str(map_year): True},
         labels={map_year: 'Overall CMCI Score'},
-        center={'lat': 12.8797, 'lon': 121.7740},  # Center coordinates of the Philippines
-        mapbox_style="carto-positron",  # Choose the Mapbox map style
-        zoom=5  # Adjust the initial zoom level as needed
+        center={'lat': 12.8797, 'lon': 121.7740},
+        mapbox_style="carto-positron", 
+        zoom=5
     )
 
     initial_fig.update_layout(
@@ -1354,8 +1354,8 @@ def update_choropleth(map_year, province):
         initial_fig.add_scattermapbox(
             lat=[lat_manila, lat_selected],
             lon=[lon_manila, lon_selected],
-            mode='markers+lines',  # Include lines in the mode
-            text=["Manila", province],  # Adjust the text accordingly
+            mode='markers+lines',
+            text=["Manila", province], 
             marker_size=15,
             opacity=0.8,
             marker_color='rgb(235, 0, 100)',
