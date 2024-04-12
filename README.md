@@ -24,17 +24,17 @@ This command will start the application, and you should see output in the termin
 ## Province Dashboard
 
 ### Features 
-- Province Charts: Includes 3 charts - line chart, bar chart, and choropleth map
+- Province Charts: Includes 3 charts - line chart, scatter plot, and choropleth map
 - Dropdown Menus: Utilizes dropdown menus for province selection with 84 provinces available
 - Nominal Variables: The province dataset is represented by nominal variables and uses a categorical color scheme in charts
 - Line Chart: Shows selected pillar indicator scores for each province at the specified year range
-- Bar Chart: Displays distances of each province from the center of Manila in miles
+- Scatter Plot: Illustrates the relationship between the Overall Scores and Distances (in miles)
 - Choropleth Map: Illustrates overall scores of all provinces
 
 ### Usage
 1. Use the dropdown menus to select provinces and specify the year range for analysis.
 2. View the line chart to observe selected pillar indicator scores for each province over time.
-3. Interpret the bar chart to understand distances of provinces from the center of Manila.
+3. Investigate the influence of the distance of provinces from Manila on their relative overall scores.
 4. Explore the choropleth map to see overall scores of provinces and observe changes based on proximity to Manila.
 
 ## LGU Dashboard
