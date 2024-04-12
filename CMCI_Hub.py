@@ -378,7 +378,7 @@ page1_layout = html.Div(
     style={'background-image': 'url(assets/phmap1.png)', 'height': '100vh','background-repeat': 'no-repeat','background-size': 'cover', 'position': 'relative'},
     children=[
         html.Div(
-            style={'display': 'flex', 'flex-direction': 'column', 'justify-content': 'center', 'align-items': 'left', 'height': '100%'},
+            style={'display': 'flex', 'flex-direction': 'column', 'justify-content': 'center', 'align-items': 'left', 'height': '100%', 'margin-left':'20px'},
             children=[
                 html.Div(
                     style={'text-align': 'left'},
