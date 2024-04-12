@@ -187,19 +187,21 @@ app.layout = dbc.Container([
                     html.Div([
                     html.H3('Choropleth Map', style={'text-align': 'center', 'margin-bottom': '10px'}),
                     dbc.Row([
-                    html.Label('Select Year', style={'font-weight': 'bold'}),
-                    dcc.Dropdown(
-                                    id='map-year-dropdown-province',
-                                    options=[{'label': str(year), 'value': year} for year in all_years],
-                                    value=2023,
-                                    style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
-                                )])
+                        html.Label('Select Year', style={'font-weight': 'bold'}),
+                        dcc.Dropdown(
+                            id='map-year-dropdown-province',
+                            options=[{'label': str(year), 'value': year} for year in all_years],
+                            value=2023,
+                            style={'width': '80px', 'margin-bottom': '1px', 'display': 'inline-block', 'vertical-align': 'middle'}
+                        )])
+                        
+                    
                     
                 ]),
                     dcc.Graph(id='choropleth-map')  # Display the initial choropleth map
                 ])
             ]),
-            ])
+            ], style={'height': '953px'})
        ], color='light')
        
        
@@ -220,24 +222,12 @@ app.layout = dbc.Container([
                 ),
                 dbc.Row([
                     dbc.Col([
-                        html.Label('Region', style={'font-weight': 'bold'}),
-                        html.Div(id='region-label')
-                    ]),
-                    dbc.Col([
-                        html.Label('Population', style={'font-weight': 'bold'}),
-                        html.Div(id='population-label')
-                    ]),
-                    dbc.Col([
-                        html.Label('Revenue', style={'font-weight': 'bold'}),
-                        html.Div(id='province-revenue-label')
-                    ]),
-                    dbc.Col([
-                        html.Label('Rank', style={'font-weight': 'bold'}),
-                        html.Div(id='rank-label')
+                        html.Div(id='map_prov_table')
                     ])
-                ], style={'margin-bottom': '20px'})
+                    
+                ], justify='center',align='center', style={'margin-bottom': '10px', 'margin-top':'10px'})
                 ])
-           ])], color='light'),
+           ], style={'height': '220px'})], color='light'),
 
            # Card 3, Bottom Right
            dbc.Card([dbc.CardBody([
@@ -252,24 +242,14 @@ app.layout = dbc.Container([
                 ),
                 dbc.Row([
                     dbc.Col([
-                        html.Label('Province', style={'font-weight': 'bold'}),
-                        html.Div(id='province-label')
-                    ]),
-                    dbc.Col([
-                        html.Label('Category', style={'font-weight': 'bold'}),
-                        html.Div(id='category-label')
-                    ]),
-                    dbc.Col([
-                        html.Label('Revenue', style={'font-weight': 'bold'}),
-                        html.Div(id='revenue-label')
+                        html.Div(id='map_lgu_table')
                     ])
-                ]),
+                ], justify='center',align='center', style={'margin-bottom': '10px', 'margin-top':'10px'}),
                 dbc.Row([
                     html.Div([
-                        html.H3('Score per Pillar', style={'text-align': 'center', 'margin-bottom': '10px'}),
                         dcc.Graph(id='bar-chart-map')
                     ])
-                ], style={'margin-top': '20px'}),
+                ]),
                 dbc.Row([
                     dbc.Col([
                         html.Label('Select Pillar', style={'font-weight': 'bold'}),
@@ -291,55 +271,76 @@ app.layout = dbc.Container([
                     ])
                 ]),
             ])
-           ])], color='light', style={'margin-top': '10px'})
+           ], style={'height': '720px'})], color='light', style={'margin-top': '10px'})
            
    ]),
    ])
    ])
 ], style={'margin-top': '20px'})
 
-# Descriptions
+# Map Page, Table Province 
 @app.callback(
-   [
-       Output('region-label', 'children'),
-       Output('population-label', 'children'),
-       Output('province-revenue-label', 'children'),
-       Output('rank-label', 'children'),
-   ],
-   [
-       Input('province-dropdown', 'value')
-   ]
+    [
+        Output('map_prov_table','children')
+    ],
+    [
+        Input('province-dropdown','value')
+    ]
 )
 def update_labels(province):
-   if province:
+    if province:
        province_region = get_province_region(province)
        province_population = get_province_population(province)
        province_revenue = get_province_revenue(province)
        province_rank = get_province_rank(province)
 
-       return province_region, province_population, province_revenue, province_rank
-   else:
-       return '-', '-', '-', '-'
-   
+       table_rows = [
+                    html.Tr([
+                            html.Th('Region', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '25%'}),  
+                            html.Th('Population', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '25%'}),
+                            html.Th('Revenue', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '25%'}),
+                            html.Th('Ranking', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '25%'})
+                            ], style={'width': '100%'})
+                    ]
+       table_rows.append(html.Tr([
+            html.Td(province_region, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'}),  
+            html.Td(province_population, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'}),
+            html.Td(province_revenue, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'}),
+            html.Td(province_rank, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '25%'})
+        ], style={'width': '100%'}))
+       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})]  # Center the table within the card
+    else:
+        return [[]]  # Return an empty list to match the expected output type
+# Map LGU Table
 @app.callback(
-   [
-       Output('province-label', 'children'),
-       Output('category-label', 'children'),
-       Output('revenue-label', 'children'),
-   ],
-   [
-       Input('lgu-dropdown', 'value'),
-   ]
+    [
+        Output('map_lgu_table','children')
+    ],
+    [
+        Input('lgu-dropdown','value')
+    ]
 )
 def update_labels(selected_lgu):
-   if selected_lgu:
+    if selected_lgu:
        lgu_province = get_lgu_province(selected_lgu)
        lgu_category = get_lgu_category(selected_lgu)
        lgu_revenue = get_lgu_revenue(selected_lgu)
 
-       return lgu_province, lgu_category, lgu_revenue
-   else:
-       return '-', '-', '-'
+       table_rows = [
+                    html.Tr([
+                            html.Th('Province', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '34%'}),  
+                            html.Th('Category', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '33%'}),
+                            html.Th('Revenue', style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'background-color': '#F1F1F1', 'width': '33%'})
+                            ], style={'width': '100%'})
+                    ]
+       table_rows.append(html.Tr([
+            html.Td(lgu_province, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '34%'}),  
+            html.Td(lgu_category, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '33%'}),
+            html.Td(lgu_revenue, style={'border-bottom': '1px solid #ddd', 'font-size': '14px', 'text-align': 'center', 'width': '33%'})
+        ], style={'width': '100%'}))
+       return [html.Table(table_rows, style={'width': '100%', 'margin': 'auto', 'textAlign': 'center'})]  # Center the table within the card
+    else:
+        return [[]]  # Return an empty list to match the expected output type
 
 def get_pillar_description(selected_pillar):
    pillar_descriptions = {
@@ -375,14 +376,18 @@ def update_bar_chart(selected_lgu):
    pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
 
    fig = px.bar(
-       x=pillars,
        y=lgu_data_row,
        labels={'x': 'Pillar', 'y': 'Score'},
-       title=f'Scores per Pillar for {selected_lgu}',
        color=pillars,
-       height=300
+       height=400,
+       title=f'Scores per Pillar for {selected_lgu}'
    )
-
+   fig.update_layout(
+            showlegend=True,
+            title_font=dict(size=20, family='Arial Black'),
+        )
+    
+   fig.update_traces(hovertemplate='Pillar: %{x} <br>Score: $%{y}<extra></extra>')
    return fig
 
 # Map
@@ -412,7 +417,7 @@ def update_choropleth(map_year, province):
     initial_fig.update_layout(
         title='Choropleth Map',
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        height=787,
+        height=800,
     )
     
     initial_fig.update_traces(hovertemplate='<b>%{hovertext}</b><br>CMCI Score: %{customdata}'
