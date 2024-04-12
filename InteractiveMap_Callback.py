@@ -376,6 +376,7 @@ def update_bar_chart(selected_lgu):
    pillars = ['Resiliency', 'Government Efficiency', 'Innovation', 'Economic Dynamism', 'Infrastructure']
 
    fig = px.bar(
+       x=pillars,
        y=lgu_data_row,
        labels={'x': 'Pillar', 'y': 'Score'},
        color=pillars,
@@ -383,7 +384,7 @@ def update_bar_chart(selected_lgu):
        title=f'Scores per Pillar for {selected_lgu}'
    )
    fig.update_layout(
-            showlegend=True,
+            showlegend=False,
             title_font=dict(size=20, family='Arial Black'),
         )
     
